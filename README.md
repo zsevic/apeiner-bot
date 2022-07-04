@@ -17,7 +17,7 @@ cp .env.sample .env # change values after copying
 nvm use 18
 npm i
 npm run start:dev
-echo "Y" | npx bottender telegram webhook set
+npm run telegram-webhook:set
 ```
 
 ### Linting
