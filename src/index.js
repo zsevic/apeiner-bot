@@ -19,7 +19,7 @@ module.exports = async function App(context) {
     do {
       console.log(`Sending ${requestNumber+1}. request...`);
       const response = await fetch(
-        `${url}?event_type=${params.event_type}&occurred_after=${params.occurred_after}`,
+        `${url}?event_type=${params.event_type}&occurred_after=${params.occurred_after}${next ? `&cursor=` + next : ''}`,
         {
           headers,
         }
@@ -44,7 +44,7 @@ module.exports = async function App(context) {
     } while (next && newItems !== 0 && requestNumber <= 10);
     const sorted = Object.entries(results).sort(
       (a, b) => b[1].numberOfSales - a[1].numberOfSales
-    );
+    ).slice(0, 5);
     if (sorted.length === 0) {
       return context.sendMessage('There are no trending collections');
     }
