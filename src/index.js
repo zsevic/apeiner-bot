@@ -7,7 +7,6 @@ module.exports = async function App(context) {
       event_type: 'successful',
       occurred_after: Math.floor(updatedDate.getTime() / 1000),
     };
-    const url = 'https://api.opensea.io/api/v1/events';
     const headers = {
       'x-api-key': process.env.OPENSEA_API_KEY,
     };
@@ -18,8 +17,14 @@ module.exports = async function App(context) {
 
     do {
       console.log(`Sending ${requestNumber+1}. request...`);
+      const queryParams = {
+        ...params,
+        ...(next && { cursor: next }),
+      };
+      const url = new URL('https://api.opensea.io/api/v1/events');
+      url.search = new URLSearchParams(queryParams);
       const response = await fetch(
-        `${url}?event_type=${params.event_type}&occurred_after=${params.occurred_after}${next ? `&cursor=` + next : ''}`,
+        url.toString(),
         {
           headers,
         }
@@ -30,11 +35,11 @@ module.exports = async function App(context) {
         const collectionName = event.asset?.collection?.name;
         if (!collectionName) return;
         if (results[collectionName]) {
-          return (results[collectionName].numberOfSales += Number(event.quantity));
+          return (results[collectionName].numberOfSales += 1);
         }
         return (results[collectionName] = {
           slug: event.asset?.collection?.slug,
-          numberOfSales: Number(event.quantity),
+          numberOfSales: 1,
         });
       });
       requestNumber += 1;
@@ -46,7 +51,7 @@ module.exports = async function App(context) {
       (a, b) => b[1].numberOfSales - a[1].numberOfSales
     ).slice(0, 5);
     if (sorted.length === 0) {
-      return context.sendMessage('There are no trending collections');
+      return context.sendMessage('There are no results');
     }
     const response = sorted
       .map(
@@ -54,11 +59,11 @@ module.exports = async function App(context) {
           `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales}`
       )
       .join('\n');
-    await context.sendMessage(`Trending after ${updatedDate.toLocaleTimeString()}\n${response}`, {
+    await context.sendMessage(`Bought after ${updatedDate.toLocaleTimeString()}\n${response}`, {
       parseMode: 'HTML',
     });
   } catch (error) {
-    console.error('Request failed', error.message);
+    console.error('Request failed', error);
     await context.sendText(`Request failed: ${error.message}`);
   }
 };
