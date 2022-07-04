@@ -7,6 +7,7 @@
     "lint": "eslint . ",
     "lint:fix": "npm run lint -- --fix",
     "start": "bottender start",
+    "telegram-webhook:set": "echo 'Y' | npx bottender telegram webhook set",
     "test": "jest"
   },
   "dependencies": {
