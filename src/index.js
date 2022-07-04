@@ -48,7 +48,9 @@ module.exports = async function App(context) {
       .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
       .slice(0, 5);
     if (sorted.length === 0) {
-      return context.sendMessage('There are no results');
+      return context.sendMessage(
+        `There are no bought NFTs after ${updatedDate.toLocaleTimeString()}`
+      );
     }
     const response = sorted
       .map(
@@ -57,7 +59,7 @@ module.exports = async function App(context) {
       )
       .join('\n');
     await context.sendMessage(
-      `Bought after ${updatedDate.toLocaleTimeString()}\n${response}`,
+      `Bought NFTs after ${updatedDate.toLocaleTimeString()}\n${response}`,
       {
         parseMode: 'HTML',
       }
