@@ -16,19 +16,16 @@ module.exports = async function App(context) {
     let newItems = 0;
 
     do {
-      console.log(`Sending ${requestNumber+1}. request...`);
+      console.log(`Sending ${requestNumber + 1}. request...`);
       const queryParams = {
         ...params,
         ...(next && { cursor: next }),
       };
       const url = new URL('https://api.opensea.io/api/v1/events');
       url.search = new URLSearchParams(queryParams);
-      const response = await fetch(
-        url.toString(),
-        {
-          headers,
-        }
-      ).then((res) => res.json());
+      const response = await fetch(url.toString(), {
+        headers,
+      }).then((res) => res.json());
       next = response.next;
       newItems = response.asset_events.length || 0;
       response.asset_events.forEach((event) => {
@@ -47,9 +44,9 @@ module.exports = async function App(context) {
         `Got ${response.asset_events.length} events, ${requestNumber}. request`
       );
     } while (next && newItems !== 0 && requestNumber <= 10);
-    const sorted = Object.entries(results).sort(
-      (a, b) => b[1].numberOfSales - a[1].numberOfSales
-    ).slice(0, 5);
+    const sorted = Object.entries(results)
+      .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
+      .slice(0, 5);
     if (sorted.length === 0) {
       return context.sendMessage('There are no results');
     }
@@ -59,9 +56,12 @@ module.exports = async function App(context) {
           `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales}`
       )
       .join('\n');
-    await context.sendMessage(`Bought after ${updatedDate.toLocaleTimeString()}\n${response}`, {
-      parseMode: 'HTML',
-    });
+    await context.sendMessage(
+      `Bought after ${updatedDate.toLocaleTimeString()}\n${response}`,
+      {
+        parseMode: 'HTML',
+      }
+    );
   } catch (error) {
     console.error('Request failed', error);
     await context.sendText(`Request failed: ${error.message}`);
