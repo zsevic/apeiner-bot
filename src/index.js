@@ -5,7 +5,7 @@ const TIMEOUT = 3000;
 module.exports = async function App(context) {
   try {
     const textMessage = context._requestContext?.body?.message?.text;
-    const minutes = [1, 2, 5, 10];
+    const minutes = [1, 2, 3, 5, 10];
     const isMinute = minutes.includes(Number(textMessage));
     let seconds = 60;
     let chosenMinutes = 1;
