@@ -2,6 +2,9 @@
   "name": "apeiner-bot",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "dev": "bottender dev",
     "lint": "eslint . ",
