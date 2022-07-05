@@ -97,8 +97,7 @@ module.exports = async function App(context) {
     const response = sorted
       .map((result) => {
         const uniqueBuyers = [...new Set(result[1].buyers)].length;
-        return `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales} sales\nunique buyers: ${uniqueBuyers}\nfloor: ${result[1].floorPrice}\ntotal volume: ${result[1].totalVolume}\ntotal supply: ${result[1].totalSupply}\nnumber of owners: ${result[1].numberOfOwners}
-        `;
+        return `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales} sales\nunique buyers: ${uniqueBuyers}\nfloor: ${result[1].floorPrice}\ntotal volume: ${result[1].totalVolume}\nowners/supply: ${result[1].numberOfOwners}/${result[1].totalSupply}\n`;
       })
       .join('\n');
     await context.sendMessage(
