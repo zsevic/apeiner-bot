@@ -35,9 +35,8 @@ module.exports = async function App(context) {
         ...params,
         ...(next && { cursor: next }),
       };
-      const url = new URL('https://api.opensea.io/api/v1/events');
-      url.search = new URLSearchParams(queryParams);
-      const response = await axios(url.toString(), {
+      const response = await axios('https://api.opensea.io/api/v1/events', {
+        params: queryParams,
         headers,
         timeout: TIMEOUT,
       }).then((res) => res.data);
