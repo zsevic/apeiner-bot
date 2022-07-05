@@ -14,7 +14,6 @@
 git clone git@github.com:zsevic/apeiner-bot.git
 cd apeiner-bot
 cp .env.sample .env # change values after copying
-nvm use 18
 npm i
 npm run start:dev
 npm run telegram-webhook:set
