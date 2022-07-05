@@ -31,11 +31,14 @@ module.exports = async function App(context) {
       response.asset_events.forEach((event) => {
         const collectionName = event.asset?.collection?.name;
         if (!collectionName) return;
+        const buyer = event.winner_account.address;
         if (results[collectionName]) {
+          results[collectionName].buyers.push(buyer);
           return (results[collectionName].numberOfSales += 1);
         }
         return (results[collectionName] = {
           slug: event.asset?.collection?.slug,
+          buyers: [buyer],
           numberOfSales: 1,
         });
       });
@@ -53,10 +56,10 @@ module.exports = async function App(context) {
       );
     }
     const response = sorted
-      .map(
-        (result) =>
-          `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales}`
-      )
+      .map((result) => {
+        const uniqueBuyers = [...new Set(result[1].buyers)].length;
+        return `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales}, unique buyers: ${uniqueBuyers}`;
+      })
       .join('\n');
     await context.sendMessage(
       `Bought NFTs after ${updatedDate.toLocaleTimeString()}\n${response}`,
