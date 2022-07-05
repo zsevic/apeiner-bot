@@ -80,10 +80,25 @@ module.exports = async function App(context) {
         } (after ${updatedDate.toLocaleTimeString()})`
       );
     }
+    for (const collectionItem of sorted) {
+      const url = `https://api.opensea.io/api/v1/collection/${collectionItem[1].slug}`;
+      const collectionData = await fetch(url, {
+        headers,
+      })
+        .then((res) => res.json())
+        .then((res) => res.collection);
+      collectionItem[1].totalSupply = collectionData.stats.total_supply;
+      collectionItem[1].numberOfOwners = collectionData.stats.num_owners;
+      collectionItem[1].floorPrice = collectionData.stats.floor_price;
+      collectionItem[1].totalVolume = Number.parseFloat(
+        collectionData.stats.total_volume
+      ).toFixed(1);
+    }
     const response = sorted
       .map((result) => {
         const uniqueBuyers = [...new Set(result[1].buyers)].length;
-        return `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales}, unique buyers: ${uniqueBuyers}`;
+        return `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales} sales\nunique buyers: ${uniqueBuyers}\nfloor: ${result[1].floorPrice}\ntotal volume: ${result[1].totalVolume}\ntotal supply: ${result[1].totalSupply}\nnumber of owners: ${result[1].numberOfOwners}
+        `;
       })
       .join('\n');
     await context.sendMessage(
