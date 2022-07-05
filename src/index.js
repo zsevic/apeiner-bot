@@ -35,11 +35,15 @@ module.exports = async function App(context) {
         ...params,
         ...(next && { cursor: next }),
       };
-      const response = await axios('https://api.opensea.io/api/v1/events', {
-        params: queryParams,
+      const url = new URL('https://api.opensea.io/api/v1/events');
+      url.search = new URLSearchParams(queryParams);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
+      const response = await fetch(url.toString(), {
         headers,
-        timeout: TIMEOUT,
-      }).then((res) => res.data);
+        signal: controller.signal,
+      }).then((res) => res.json());
+      clearTimeout(timeoutId);
       next = response.next;
       newItems = response.asset_events.length || 0;
       response.asset_events.forEach((event) => {
