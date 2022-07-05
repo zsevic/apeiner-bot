@@ -66,7 +66,7 @@ module.exports = async function App(context) {
       console.log(
         `Got ${response.asset_events.length} events, ${requestNumber}. request`
       );
-    } while (next && newItems !== 0 && requestNumber <= 10);
+    } while (next && newItems !== 0);
     const sorted = Object.entries(results)
       .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
       .slice(0, 5);
