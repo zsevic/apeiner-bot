@@ -1,3 +1,5 @@
+const protocols = ["ERC721", "ERC1155"];
+
 module.exports = async function App(context) {
   try {
     const date = new Date();
@@ -29,6 +31,11 @@ module.exports = async function App(context) {
       next = response.next;
       newItems = response.asset_events.length || 0;
       response.asset_events.forEach((event) => {
+        const schemaNema = event.asset?.asset_contract?.schema_name;
+        if (!protocols.includes(schemaNema)) {
+          console.log(`Skipping ${schemaNema}`);
+          return;
+        }
         const collectionName = event.asset?.collection?.name;
         if (!collectionName) return;
         const buyer = event.winner_account.address;
