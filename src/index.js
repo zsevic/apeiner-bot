@@ -1,3 +1,4 @@
+const axios = require('axios');
 const PROTOCOLS = ['ERC721', 'ERC1155'];
 const TIMEOUT = 3000;
 
@@ -36,13 +37,10 @@ module.exports = async function App(context) {
       };
       const url = new URL('https://api.opensea.io/api/v1/events');
       url.search = new URLSearchParams(queryParams);
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
-      const response = await fetch(url.toString(), {
+      const response = await axios(url.toString(), {
         headers,
-        signal: controller.signal,
-      }).then((res) => res.json());
-      clearTimeout(timeoutId);
+        timeout: TIMEOUT,
+      }).then((res) => res.data);
       next = response.next;
       newItems = response.asset_events.length || 0;
       response.asset_events.forEach((event) => {
@@ -74,7 +72,9 @@ module.exports = async function App(context) {
       .slice(0, 5);
     if (sorted.length === 0) {
       return context.sendMessage(
-        `There are no bought NFTs after ${updatedDate.toLocaleTimeString()}`
+        `There are no bought NFTs in last ${chosenMinutes} minute${
+          chosenMinutes > 1 ? 's' : ''
+        } (after ${updatedDate.toLocaleTimeString()})`
       );
     }
     const response = sorted
@@ -84,9 +84,9 @@ module.exports = async function App(context) {
       })
       .join('\n');
     await context.sendMessage(
-      `Bought NFTs after ${updatedDate.toLocaleTimeString()} (last ${chosenMinutes} minute${
+      `Bought NFTs in last ${chosenMinutes} minute${
         chosenMinutes > 1 ? 's' : ''
-      })\n${response}`,
+      } (after ${updatedDate.toLocaleTimeString()})\n${response}`,
       {
         parseMode: 'HTML',
       }
