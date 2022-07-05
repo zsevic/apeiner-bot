@@ -37,13 +37,9 @@ module.exports = async function App(context) {
       };
       const url = new URL('https://api.opensea.io/api/v1/events');
       url.search = new URLSearchParams(queryParams);
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
-      const response = await fetch(url.toString(), {
+      const response = await axios(url.toString(), {
         headers,
-        signal: controller.signal,
-      }).then((res) => res.json());
-      clearTimeout(timeoutId);
+      }).then((res) => res.data);
       next = response.next;
       newItems = response.asset_events.length || 0;
       response.asset_events.forEach((event) => {
@@ -82,11 +78,9 @@ module.exports = async function App(context) {
     }
     for (const collectionItem of sorted) {
       const url = `https://api.opensea.io/api/v1/collection/${collectionItem[1].slug}`;
-      const collectionData = await fetch(url, {
+      const collectionData = await axios(url, {
         headers,
-      })
-        .then((res) => res.json())
-        .then((res) => res.collection);
+      }).then((res) => res.data.collection);
       collectionItem[1].totalSupply = collectionData.stats.total_supply;
       collectionItem[1].numberOfOwners = collectionData.stats.num_owners;
       collectionItem[1].floorPrice = collectionData.stats.floor_price;
