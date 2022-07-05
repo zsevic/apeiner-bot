@@ -1,4 +1,4 @@
-const PROTOCOLS = ["ERC721", "ERC1155"];
+const PROTOCOLS = ['ERC721', 'ERC1155'];
 const TIMEOUT = 3000;
 
 module.exports = async function App(context) {
@@ -7,7 +7,9 @@ module.exports = async function App(context) {
     const minutes = [1, 2, 5, 10];
     const isMinute = minutes.includes(Number(textMessage));
     let seconds = 60;
+    let chosenMinutes = 1;
     if (isMinute) {
+      chosenMinutes = Number(textMessage);
       seconds = 60 * Number(textMessage);
     }
 
@@ -82,7 +84,9 @@ module.exports = async function App(context) {
       })
       .join('\n');
     await context.sendMessage(
-      `Bought NFTs after ${updatedDate.toLocaleTimeString()}\n${response}`,
+      `Bought NFTs after ${updatedDate.toLocaleTimeString()} (last ${chosenMinutes} minute${
+        chosenMinutes > 1 ? 's' : ''
+      })\n${response}`,
       {
         parseMode: 'HTML',
       }
