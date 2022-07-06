@@ -2,11 +2,11 @@ const axios = require('axios');
 const { headers } = require('./constants');
 const { logger } = require('./logger');
 const {
-  formatResponse,
   getCollections,
   getFilteredCollections,
   getSortedCollections,
   getMessageForEmptyList,
+  getResponse,
 } = require('./services');
 const { isEmptyObject, getDate, getTime } = require('./utils');
 
@@ -82,15 +82,10 @@ module.exports = async function App(context) {
     );
     logger.info('Got listings info...');
 
-    const response = formatResponse(filteredCollections);
-    await context.sendMessage(
-      `Bought NFTs in last ${minutes} minute${
-        minutes > 1 ? 's' : ''
-      } (after ${date.toLocaleTimeString()})\n${response}`,
-      {
-        parseMode: 'HTML',
-      }
-    );
+    const response = getResponse(filteredCollections, minutes, date);
+    await context.sendMessage(response, {
+      parseMode: 'HTML',
+    });
   } catch (error) {
     logger.error(error, error.message);
     await context.sendText(`Request failed: ${error.message}`);

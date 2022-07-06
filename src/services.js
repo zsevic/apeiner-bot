@@ -29,6 +29,13 @@ const formatResponse = (filteredCollections) =>
     })
     .join('\n');
 
+const getResponse = (collections, minutes, date) => {
+  const formattedResponse = formatResponse(collections);
+  return `Bought NFTs in last ${minutes} minute${
+    minutes > 1 ? 's' : ''
+  } (after ${date.toLocaleTimeString()})\n${formattedResponse}`;
+};
+
 const getCollections = async (date) => {
   let next;
   let requestNumber = 0;
@@ -99,5 +106,6 @@ module.exports = {
   getCollections,
   getFilteredCollections,
   getMessageForEmptyList,
+  getResponse,
   getSortedCollections,
 };
