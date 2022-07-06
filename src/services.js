@@ -1,5 +1,12 @@
 const axios = require('axios');
-const { headers, PROTOCOLS, COLLECTIONS_TO_ANALYZE } = require('./constants');
+const {
+  headers,
+  PROTOCOLS,
+  COLLECTIONS_TO_ANALYZE,
+  MIN_FLOOR_PRICE,
+  MIN_VOLUME,
+  MAX_TOTAL_SUPPLY,
+} = require('./constants');
 const { logger } = require('./logger');
 
 const formatResponse = (filteredCollections) =>
@@ -68,6 +75,15 @@ const getCollections = async (date) => {
   return results;
 };
 
+const getFilteredCollections = (collections) =>
+  collections.filter(
+    ([, value]) =>
+      value.totalSupply <= MAX_TOTAL_SUPPLY &&
+      value.isEthereumCollection &&
+      value.totalVolume > MIN_VOLUME &&
+      value.floorPrice >= MIN_FLOOR_PRICE
+  );
+
 const getMessageForEmptyList = (minutes, date) =>
   `There are no bought NFTs in last ${minutes} minute${
     minutes > 1 ? 's' : ''
@@ -81,6 +97,7 @@ const getSortedCollections = (collections) =>
 module.exports = {
   formatResponse,
   getCollections,
+  getFilteredCollections,
   getMessageForEmptyList,
   getSortedCollections,
 };

@@ -1,14 +1,10 @@
 const axios = require('axios');
-const {
-  headers,
-  MAX_TOTAL_SUPPLY,
-  MIN_FLOOR_PRICE,
-  MIN_VOLUME,
-} = require('./constants');
+const { headers } = require('./constants');
 const { logger } = require('./logger');
 const {
   formatResponse,
   getCollections,
+  getFilteredCollections,
   getSortedCollections,
   getMessageForEmptyList,
 } = require('./services');
@@ -50,13 +46,7 @@ module.exports = async function App(context) {
     );
     logger.info('Got collections info...');
 
-    const filteredCollections = sortedCollections.filter(
-      ([, value]) =>
-        value.totalSupply <= MAX_TOTAL_SUPPLY &&
-        value.isEthereumCollection &&
-        value.totalVolume > MIN_VOLUME &&
-        value.floorPrice >= MIN_FLOOR_PRICE
-    );
+    const filteredCollections = getFilteredCollections(sortedCollections);
     if (filteredCollections.length === 0) {
       return context.sendMessage(getMessageForEmptyList(minutes, date));
     }

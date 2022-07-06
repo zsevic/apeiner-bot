@@ -1,4 +1,8 @@
-const { formatResponse, getSortedCollections } = require('./services');
+const {
+  formatResponse,
+  getSortedCollections,
+  getFilteredCollections,
+} = require('./services');
 
 describe('formatResponse', () => {
   it('should format response', () => {
@@ -22,6 +26,63 @@ describe('formatResponse', () => {
     const expectedResult = `<a href=\"https://opensea.io/collection/nft\">nft</a>: 4 sales\nunique buyers: 3\nUNREVEALED\nfloor: 0.5eth\naverage price: 0.4eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\n`;
 
     const result = formatResponse(collections);
+
+    expect(result).toEqual(expectedResult);
+  });
+});
+
+describe('getFilteredCollections', () => {
+  it('should return filtered collections', () => {
+    const collections = [
+      [
+        'nft1',
+        {
+          floorPrice: 1,
+          isEthereumCollection: true,
+          totalSupply: 4000,
+          totalVolume: 32,
+        },
+      ],
+      [
+        'nft2',
+        {
+          floorPrice: 0.005,
+          isEthereumCollection: true,
+          totalSupply: 4000,
+          totalVolume: 32,
+        },
+      ],
+      [
+        'nft3',
+        {
+          floorPrice: 1,
+          isEthereumCollection: false,
+          totalSupply: 4000,
+          totalVolume: 32,
+        },
+      ],
+      [
+        'nft4',
+        {
+          floorPrice: 1,
+          isEthereumCollection: true,
+          totalSupply: 20000,
+          totalVolume: 32,
+        },
+      ],
+      [
+        'nft5',
+        {
+          floorPrice: 1,
+          isEthereumCollection: true,
+          totalSupply: 2000,
+          totalVolume: 12,
+        },
+      ],
+    ];
+    const expectedResult = [collections[0]];
+
+    const result = getFilteredCollections(collections);
 
     expect(result).toEqual(expectedResult);
   });
