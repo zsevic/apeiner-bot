@@ -25,7 +25,7 @@ const formatResponse = (filteredCollections) =>
         result[1].numberOfListed
       }/${result[1].totalSupply}\nowners/supply: ${result[1].numberOfOwners}/${
         result[1].totalSupply
-      }\n`;
+      }\nroyalty: ${result[1].royalty}%\n`;
     })
     .join('\n');
 

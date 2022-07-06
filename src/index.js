@@ -31,6 +31,8 @@ module.exports = async function App(context) {
         }).then((res) => res.data.collection);
         collectionItem[1].totalSupply = collectionData.stats.total_supply;
         collectionItem[1].numberOfOwners = collectionData.stats.num_owners;
+        collectionItem[1].royalty =
+          Number(collectionData.dev_seller_fee_basis_points) / 100;
         collectionItem[1].floorPrice =
           Number.parseFloat(collectionData.stats.floor_price).toFixed(3) * 1;
         collectionItem[1].totalVolume =
