@@ -35,3 +35,9 @@ npm test
 ### Technologies used
 
 - Node.js, Bottender
+
+## Chatbot setup
+
+```bash
+npx bottender telegram webhook set -w https://lionfish-app-rgbxa.ondigitalocean.app/webhooks/telegram
+```
