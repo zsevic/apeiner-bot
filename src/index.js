@@ -1,5 +1,10 @@
 const axios = require('axios');
-const { MAX_TOTAL_SUPPLY, MIN_VOLUME } = require('./constants');
+const {
+  COLLECTIONS_TO_ANALYZE,
+  MAX_TOTAL_SUPPLY,
+  MIN_FLOOR_PRICE,
+  MIN_VOLUME,
+} = require('./constants');
 const { isEmptyObject } = require('./utils');
 const PROTOCOLS = ['ERC721', 'ERC1155'];
 
@@ -68,7 +73,7 @@ module.exports = async function App(context) {
     } while (next && newItems !== 0);
     const sorted = Object.entries(results)
       .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
-      .slice(0, 5);
+      .slice(0, COLLECTIONS_TO_ANALYZE);
     if (sorted.length === 0) {
       return context.sendMessage(
         `There are no bought NFTs in last ${chosenMinutes} minute${
@@ -101,7 +106,8 @@ module.exports = async function App(context) {
       ([_, value]) =>
         value.totalSupply <= MAX_TOTAL_SUPPLY &&
         value.isEthereumCollection &&
-        value.totalVolume > MIN_VOLUME
+        value.totalVolume > MIN_VOLUME &&
+        value.floorPrice >= MIN_FLOOR_PRICE
     );
 
     for (const collectionItem of filteredCollections) {
