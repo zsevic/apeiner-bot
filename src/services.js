@@ -151,6 +151,11 @@ const getResponse = (collections, minutes, date) => {
   } (after ${date.toLocaleTimeString()})\n${formattedResponse}`;
 };
 
+const getSortedCollections = (collections) =>
+  Object.entries(collections)
+    .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
+    .slice(0, COLLECTIONS_TO_ANALYZE);
+
 const handleMessage = async (textMessage) => {
   try {
     const [seconds, minutes] = getTime(textMessage);
@@ -181,11 +186,6 @@ const handleMessage = async (textMessage) => {
     return `Request failed: ${error.message}`;
   }
 };
-
-const getSortedCollections = (collections) =>
-  Object.entries(collections)
-    .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
-    .slice(0, COLLECTIONS_TO_ANALYZE);
 
 module.exports = {
   addCollectionsInfo,
