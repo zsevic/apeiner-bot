@@ -7,6 +7,7 @@ const {
   PROTOCOLS,
 } = require('./constants');
 const { logger } = require('./logger');
+const { formatResponse } = require('./services');
 const { isEmptyObject } = require('./utils');
 
 module.exports = async function App(context) {
@@ -68,7 +69,7 @@ module.exports = async function App(context) {
       });
       requestNumber += 1;
       logger.info(
-        `Got ${response.asset_events.length} events, ${requestNumber}. request`
+        `Got ${response.asset_events.length} events, finished ${requestNumber}. request`
       );
     } while (next && newItems !== 0);
     const sortedCollections = Object.entries(results)
@@ -151,24 +152,7 @@ module.exports = async function App(context) {
     );
     logger.info('Got listings info...');
 
-    const response = filteredCollections
-      .map((result) => {
-        const uniqueBuyers = [...new Set(result[1].buyers)].length;
-        return `<a href="https://opensea.io/collection/${result[1].slug}">${
-          result[0]
-        }</a>: ${result[1].numberOfSales} sale${
-          result[1].numberOfSales > 1 ? 's' : ''
-        }\nunique buyers: ${uniqueBuyers}\n${
-          result[1].isUnrevealed ? 'UNREVEALED\n' : ''
-        }floor: ${result[1].floorPrice}eth\naverage price: ${
-          result[1].averagePrice
-        }eth\ntotal volume: ${result[1].totalVolume}eth\nlisted/supply: ${
-          result[1].numberOfListed
-        }/${result[1].totalSupply}\nowners/supply: ${
-          result[1].numberOfOwners
-        }/${result[1].totalSupply}\n`;
-      })
-      .join('\n');
+    const response = formatResponse(filteredCollections);
     await context.sendMessage(
       `Bought NFTs in last ${chosenMinutes} minute${
         chosenMinutes > 1 ? 's' : ''
