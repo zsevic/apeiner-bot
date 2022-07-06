@@ -88,7 +88,8 @@ const getFilteredCollections = (collections) =>
       value.totalSupply <= MAX_TOTAL_SUPPLY &&
       value.isEthereumCollection &&
       value.totalVolume > MIN_VOLUME &&
-      value.floorPrice >= MIN_FLOOR_PRICE
+      value.floorPrice >= MIN_FLOOR_PRICE &&
+      value.numberOfOwners <= value.totalSupply
   );
 
 const getMessageForEmptyList = (minutes, date) =>

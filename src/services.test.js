@@ -39,6 +39,7 @@ describe('getFilteredCollections', () => {
         {
           floorPrice: 1,
           isEthereumCollection: true,
+          numberOfOwners: 2000,
           totalSupply: 4000,
           totalVolume: 32,
         },
@@ -48,6 +49,7 @@ describe('getFilteredCollections', () => {
         {
           floorPrice: 0.005,
           isEthereumCollection: true,
+          numberOfOwners: 3000,
           totalSupply: 4000,
           totalVolume: 32,
         },
@@ -57,6 +59,7 @@ describe('getFilteredCollections', () => {
         {
           floorPrice: 1,
           isEthereumCollection: false,
+          numberOfOwners: 3000,
           totalSupply: 4000,
           totalVolume: 32,
         },
@@ -66,6 +69,7 @@ describe('getFilteredCollections', () => {
         {
           floorPrice: 1,
           isEthereumCollection: true,
+          numberOfOwners: 5000,
           totalSupply: 20000,
           totalVolume: 32,
         },
@@ -75,8 +79,19 @@ describe('getFilteredCollections', () => {
         {
           floorPrice: 1,
           isEthereumCollection: true,
+          numberOfOwners: 1000,
           totalSupply: 2000,
           totalVolume: 12,
+        },
+      ],
+      [
+        'nft6',
+        {
+          floorPrice: 1,
+          isEthereumCollection: true,
+          numberOfOwners: 5000,
+          totalSupply: 4000,
+          totalVolume: 32,
         },
       ],
     ];
