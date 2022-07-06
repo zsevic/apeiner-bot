@@ -144,7 +144,7 @@ const getFilteredCollections = (collections) =>
   );
 
 const getTimezoneDate = (date) =>
-  date.toLocaleString('en-US', { timeZone: TIMEZONE });
+  date.toLocaleTimeString('en-US', { timeZone: TIMEZONE });
 
 const getMessageForEmptyList = (minutes, date) =>
   `There are no bought NFTs in last ${minutes} minute${
