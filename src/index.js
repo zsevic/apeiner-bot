@@ -93,10 +93,13 @@ module.exports = async function App(context) {
         collectionData.stats.average_price
       ).toFixed(3);
       collectionItem[1].isUnrevealed = isEmptyObject(collectionData.traits);
+      collectionItem[1].isEthereumCollection =
+        !!collectionData.payment_tokens.find((token) => token.symbol === 'ETH');
     }
 
     const filteredCollections = sorted.filter(
-      ([_, value]) => value.totalSupply <= MAX_TOTAL_SUPPLY
+      ([_, value]) =>
+        value.totalSupply <= MAX_TOTAL_SUPPLY && value.isEthereumCollection
     );
 
     for (const collectionItem of filteredCollections) {
