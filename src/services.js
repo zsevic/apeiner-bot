@@ -48,10 +48,7 @@ const addListingInfo = async (collections) =>
           return res.data?.data?.query?.search?.totalCount;
         })
         .catch((error) => {
-          console.error(
-            'Fetching number of listed failed:',
-            error.response?.data || error
-          );
+          logger.error(error, error.response?.data || error.message);
           return null;
         });
       if (collectionListingsInfo) {
