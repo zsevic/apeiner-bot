@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { MAX_TOTAL_SUPPLY } = require('./constants');
+const { MAX_TOTAL_SUPPLY, MIN_VOLUME } = require('./constants');
 const { isEmptyObject } = require('./utils');
 const PROTOCOLS = ['ERC721', 'ERC1155'];
 
@@ -99,7 +99,9 @@ module.exports = async function App(context) {
 
     const filteredCollections = sorted.filter(
       ([_, value]) =>
-        value.totalSupply <= MAX_TOTAL_SUPPLY && value.isEthereumCollection
+        value.totalSupply <= MAX_TOTAL_SUPPLY &&
+        value.isEthereumCollection &&
+        value.totalVolume > MIN_VOLUME
     );
 
     for (const collectionItem of filteredCollections) {
