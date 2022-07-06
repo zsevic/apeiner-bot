@@ -4,9 +4,9 @@ const {
   MAX_TOTAL_SUPPLY,
   MIN_FLOOR_PRICE,
   MIN_VOLUME,
+  PROTOCOLS,
 } = require('./constants');
 const { isEmptyObject } = require('./utils');
-const PROTOCOLS = ['ERC721', 'ERC1155'];
 
 module.exports = async function App(context) {
   try {
