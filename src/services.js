@@ -22,9 +22,14 @@ const formatResponse = (filteredCollections) =>
         result[1].isUnrevealed ? 'UNREVEALED\n' : ''
       }floor: ${result[1].floorPrice}eth\naverage price: ${
         result[1].averagePrice
-      }eth\ntotal volume: ${result[1].totalVolume}eth\nlisted/supply: ${
+      }eth\ntotal volume: ${result[1].totalVolume}eth\n${
         result[1].numberOfListed
-      }/${result[1].totalSupply}\nowners/supply: ${result[1].numberOfOwners}/${
+          ? 'listed/supply: ' +
+            result[1].numberOfListed +
+            '/' +
+            result[1].totalSupply
+          : ''
+      }\nowners/supply: ${result[1].numberOfOwners}/${
         result[1].totalSupply
       }\nroyalty: ${result[1].royalty}%\n`;
     })
