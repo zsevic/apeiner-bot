@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { headers, PROTOCOLS } = require('./constants');
+const { headers, PROTOCOLS, COLLECTIONS_TO_ANALYZE } = require('./constants');
 const { logger } = require('./logger');
 
 const formatResponse = (filteredCollections) =>
@@ -22,7 +22,7 @@ const formatResponse = (filteredCollections) =>
     })
     .join('\n');
 
-const getList = async (date) => {
+const getCollections = async (date) => {
   let next;
   let requestNumber = 0;
   let newItems = 0;
@@ -68,7 +68,13 @@ const getList = async (date) => {
   return results;
 };
 
+const getSortedCollections = (collections) =>
+  Object.entries(collections)
+    .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
+    .slice(0, COLLECTIONS_TO_ANALYZE);
+
 module.exports = {
   formatResponse,
-  getList,
+  getCollections,
+  getSortedCollections,
 };

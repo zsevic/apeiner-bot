@@ -1,13 +1,16 @@
 const axios = require('axios');
 const {
-  COLLECTIONS_TO_ANALYZE,
   headers,
   MAX_TOTAL_SUPPLY,
   MIN_FLOOR_PRICE,
   MIN_VOLUME,
 } = require('./constants');
 const { logger } = require('./logger');
-const { formatResponse, getList } = require('./services');
+const {
+  formatResponse,
+  getCollections,
+  getSortedCollections,
+} = require('./services');
 const { isEmptyObject, getDate, getTime } = require('./utils');
 
 module.exports = async function App(context) {
@@ -16,11 +19,9 @@ module.exports = async function App(context) {
     const [seconds, minutes] = getTime(textMessage);
 
     const date = getDate(seconds);
-    const results = await getList(date);
+    const collections = await getCollections(date);
 
-    const sortedCollections = Object.entries(results)
-      .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
-      .slice(0, COLLECTIONS_TO_ANALYZE);
+    const sortedCollections = getSortedCollections(collections);
     if (sortedCollections.length === 0) {
       return context.sendMessage(
         `There are no bought NFTs in last ${minutes} minute${
