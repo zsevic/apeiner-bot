@@ -27,9 +27,10 @@ const formatResponse = (filteredCollections) =>
           ? 'listed/supply: ' +
             result[1].numberOfListed +
             '/' +
-            result[1].totalSupply
+            result[1].totalSupply +
+            '\n'
           : ''
-      }\nowners/supply: ${result[1].numberOfOwners}/${
+      }owners/supply: ${result[1].numberOfOwners}/${
         result[1].totalSupply
       }\nroyalty: ${result[1].royalty}%\n`;
     })
