@@ -10,6 +10,7 @@ const {
   formatResponse,
   getCollections,
   getSortedCollections,
+  getMessageForEmptyList,
 } = require('./services');
 const { isEmptyObject, getDate, getTime } = require('./utils');
 
@@ -23,11 +24,7 @@ module.exports = async function App(context) {
 
     const sortedCollections = getSortedCollections(collections);
     if (sortedCollections.length === 0) {
-      return context.sendMessage(
-        `There are no bought NFTs in last ${minutes} minute${
-          minutes > 1 ? 's' : ''
-        } (after ${updatedDate.toLocaleTimeString()})`
-      );
+      return context.sendMessage(getMessageForEmptyList(minutes, date));
     }
     logger.info('Getting collections info...');
     await Promise.all(
@@ -61,11 +58,7 @@ module.exports = async function App(context) {
         value.floorPrice >= MIN_FLOOR_PRICE
     );
     if (filteredCollections.length === 0) {
-      return context.sendMessage(
-        `There are no bought NFTs in last ${minutes} minute${
-          minutes > 1 ? 's' : ''
-        } (after ${date.toLocaleTimeString()})`
-      );
+      return context.sendMessage(getMessageForEmptyList(minutes, date));
     }
 
     logger.info('Getting listings info...');

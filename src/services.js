@@ -68,6 +68,11 @@ const getCollections = async (date) => {
   return results;
 };
 
+const getMessageForEmptyList = (minutes, date) =>
+  `There are no bought NFTs in last ${minutes} minute${
+    minutes > 1 ? 's' : ''
+  } (after ${date.toLocaleTimeString()})`;
+
 const getSortedCollections = (collections) =>
   Object.entries(collections)
     .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
@@ -76,5 +81,6 @@ const getSortedCollections = (collections) =>
 module.exports = {
   formatResponse,
   getCollections,
+  getMessageForEmptyList,
   getSortedCollections,
 };
