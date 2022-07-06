@@ -156,9 +156,9 @@ module.exports = async function App(context) {
         const uniqueBuyers = [...new Set(result[1].buyers)].length;
         return `<a href="https://opensea.io/collection/${result[1].slug}">${
           result[0]
-        }</a>: ${
-          result[1].numberOfSales
-        } sales\nunique buyers: ${uniqueBuyers}\n${
+        }</a>: ${result[1].numberOfSales} sale${
+          result[1].numberOfSales > 1 ? 's' : ''
+        }\nunique buyers: ${uniqueBuyers}\n${
           result[1].isUnrevealed ? 'UNREVEALED\n' : ''
         }floor: ${result[1].floorPrice}eth\naverage price: ${
           result[1].averagePrice
