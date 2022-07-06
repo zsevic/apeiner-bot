@@ -6,6 +6,7 @@ const {
   MIN_VOLUME,
   PROTOCOLS,
 } = require('./constants');
+const { logger } = require('./logger');
 const { isEmptyObject } = require('./utils');
 
 module.exports = async function App(context) {
@@ -36,11 +37,11 @@ module.exports = async function App(context) {
     let newItems = 0;
 
     do {
-      console.log(`Sending ${requestNumber + 1}. request...`);
       const queryParams = {
         ...params,
         ...(next && { cursor: next }),
       };
+      logger.info(`Sending ${requestNumber + 1}. request...`);
       const response = await axios('https://api.opensea.io/api/v1/events', {
         params: queryParams,
         headers,
@@ -50,7 +51,6 @@ module.exports = async function App(context) {
       response.asset_events.forEach((event) => {
         const schemaNema = event.asset?.asset_contract?.schema_name;
         if (!PROTOCOLS.includes(schemaNema)) {
-          console.log(`Skipping ${schemaNema}`);
           return;
         }
         const collectionName = event.asset?.collection?.name;
@@ -67,7 +67,7 @@ module.exports = async function App(context) {
         });
       });
       requestNumber += 1;
-      console.log(
+      logger.info(
         `Got ${response.asset_events.length} events, ${requestNumber}. request`
       );
     } while (next && newItems !== 0);
@@ -81,6 +81,7 @@ module.exports = async function App(context) {
         } (after ${updatedDate.toLocaleTimeString()})`
       );
     }
+    logger.info('Getting collections info...');
     await Promise.all(
       sortedCollections.map(async (collectionItem) => {
         const url = `https://api.opensea.io/api/v1/collection/${collectionItem[1].slug}`;
@@ -102,6 +103,7 @@ module.exports = async function App(context) {
           );
       })
     );
+    logger.info('Got collections info...');
 
     const filteredCollections = sortedCollections.filter(
       ([_, value]) =>
@@ -111,6 +113,7 @@ module.exports = async function App(context) {
         value.floorPrice >= MIN_FLOOR_PRICE
     );
 
+    logger.info('Getting listings info...');
     await Promise.all(
       filteredCollections.map(async (collectionItem) => {
         const collectionSlug = collectionItem[1].slug;
@@ -139,6 +142,8 @@ module.exports = async function App(context) {
         }
       })
     );
+    logger.info('Got listings info...');
+
     const response = filteredCollections
       .map((result) => {
         const uniqueBuyers = [...new Set(result[1].buyers)].length;
@@ -166,7 +171,7 @@ module.exports = async function App(context) {
       }
     );
   } catch (error) {
-    console.error('Request failed', error);
+    logger.error(error, error.message);
     await context.sendText(`Request failed: ${error.message}`);
   }
 };
