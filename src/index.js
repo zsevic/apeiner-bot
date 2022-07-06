@@ -86,11 +86,14 @@ module.exports = async function App(context) {
       collectionItem[1].totalVolume = Number.parseFloat(
         collectionData.stats.total_volume
       ).toFixed(1);
+      collectionItem[1].averagePrice = Number.parseFloat(
+        collectionData.stats.average_price
+      ).toFixed(3);
     }
     const response = sorted
       .map((result) => {
         const uniqueBuyers = [...new Set(result[1].buyers)].length;
-        return `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales} sales\nunique buyers: ${uniqueBuyers}\nfloor: ${result[1].floorPrice}\ntotal volume: ${result[1].totalVolume}\nowners/supply: ${result[1].numberOfOwners}/${result[1].totalSupply}\n`;
+        return `<a href="https://opensea.io/collection/${result[1].slug}">${result[0]}</a>: ${result[1].numberOfSales} sales\nunique buyers: ${uniqueBuyers}\nfloor: ${result[1].floorPrice}eth\naverage price: ${result[1].averagePrice}eth\ntotal volume: ${result[1].totalVolume}eth\nowners/supply: ${result[1].numberOfOwners}/${result[1].totalSupply}\n`;
       })
       .join('\n');
     await context.sendMessage(
