@@ -1,4 +1,4 @@
-const { formatResponse } = require('./services');
+const { formatResponse, getSortedCollections } = require('./services');
 
 describe('formatResponse', () => {
   it('should format response', () => {
@@ -24,5 +24,84 @@ describe('formatResponse', () => {
     const result = formatResponse(collections);
 
     expect(result).toEqual(expectedResult);
+  });
+});
+
+describe('getSortedCollections', () => {
+  it('should return sorted collections', () => {
+    const collections = {
+      nft1: {
+        numberOfSales: 2,
+      },
+      nft2: {
+        numberOfSales: 4,
+      },
+      nft3: {
+        numberOfSales: 6,
+      },
+      nft4: {
+        numberOfSales: 8,
+      },
+      nft5: {
+        numberOfSales: 3,
+      },
+      nft6: {
+        numberOfSales: 5,
+      },
+      nft7: {
+        numberOfSales: 1,
+      },
+      nft8: {
+        numberOfSales: 10,
+      },
+    };
+    const sortedCollections = [
+      [
+        'nft8',
+        {
+          numberOfSales: 10,
+        },
+      ],
+      [
+        'nft4',
+        {
+          numberOfSales: 8,
+        },
+      ],
+      [
+        'nft3',
+        {
+          numberOfSales: 6,
+        },
+      ],
+      [
+        'nft6',
+        {
+          numberOfSales: 5,
+        },
+      ],
+      [
+        'nft2',
+        {
+          numberOfSales: 4,
+        },
+      ],
+      [
+        'nft5',
+        {
+          numberOfSales: 3,
+        },
+      ],
+      [
+        'nft1',
+        {
+          numberOfSales: 2,
+        },
+      ],
+    ];
+
+    const result = getSortedCollections(collections);
+
+    expect(result).toEqual(sortedCollections);
   });
 });
