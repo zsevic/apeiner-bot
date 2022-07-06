@@ -8,7 +8,7 @@ const {
   MAX_TOTAL_SUPPLY,
 } = require('./constants');
 const { logger } = require('./logger');
-const { isEmptyObject } = require('./utils');
+const { isEmptyObject, getTime, getDate } = require('./utils');
 
 const formatResponse = (filteredCollections) =>
   filteredCollections
@@ -151,6 +151,37 @@ const getResponse = (collections, minutes, date) => {
   } (after ${date.toLocaleTimeString()})\n${formattedResponse}`;
 };
 
+const handleMessage = async (textMessage) => {
+  try {
+    const [seconds, minutes] = getTime(textMessage);
+
+    const date = getDate(seconds);
+    const collections = await getCollections(date);
+
+    const sortedCollections = getSortedCollections(collections);
+    if (sortedCollections.length === 0) {
+      return getMessageForEmptyList(minutes, date);
+    }
+    logger.info('Adding collections info...');
+    await addCollectionsInfo(sortedCollections);
+    logger.info('Added collections info...');
+
+    const filteredCollections = getFilteredCollections(sortedCollections);
+    if (filteredCollections.length === 0) {
+      return getMessageForEmptyList(minutes, date);
+    }
+
+    logger.info('Adding listings info...');
+    await addListingInfo(filteredCollections);
+    logger.info('Added listings info...');
+
+    return getResponse(filteredCollections, minutes, date);
+  } catch (error) {
+    logger.error(error, error.message);
+    return `Request failed: ${error.message}`;
+  }
+};
+
 const getSortedCollections = (collections) =>
   Object.entries(collections)
     .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
@@ -165,4 +196,5 @@ module.exports = {
   getMessageForEmptyList,
   getResponse,
   getSortedCollections,
+  handleMessage,
 };
