@@ -106,12 +106,19 @@ module.exports = async function App(context) {
     logger.info('Got collections info...');
 
     const filteredCollections = sortedCollections.filter(
-      ([_, value]) =>
+      ([, value]) =>
         value.totalSupply <= MAX_TOTAL_SUPPLY &&
         value.isEthereumCollection &&
         value.totalVolume > MIN_VOLUME &&
         value.floorPrice >= MIN_FLOOR_PRICE
     );
+    if (filteredCollections.length === 0) {
+      return context.sendMessage(
+        `There are no bought NFTs in last ${chosenMinutes} minute${
+          chosenMinutes > 1 ? 's' : ''
+        } (after ${updatedDate.toLocaleTimeString()})`
+      );
+    }
 
     logger.info('Getting listings info...');
     await Promise.all(
