@@ -82,7 +82,9 @@ module.exports = async function App(context) {
       }).then((res) => res.data.collection);
       collectionItem[1].totalSupply = collectionData.stats.total_supply;
       collectionItem[1].numberOfOwners = collectionData.stats.num_owners;
-      collectionItem[1].floorPrice = collectionData.stats.floor_price;
+      collectionItem[1].floorPrice = Number.parseFloat(
+        collectionData.stats.floor_price
+      ).toFixed(3);
       collectionItem[1].totalVolume = Number.parseFloat(
         collectionData.stats.total_volume
       ).toFixed(1);
