@@ -88,15 +88,12 @@ module.exports = async function App(context) {
       }).then((res) => res.data.collection);
       collectionItem[1].totalSupply = collectionData.stats.total_supply;
       collectionItem[1].numberOfOwners = collectionData.stats.num_owners;
-      collectionItem[1].floorPrice = Number.parseFloat(
-        collectionData.stats.floor_price
-      ).toFixed(3);
-      collectionItem[1].totalVolume = Number.parseFloat(
-        collectionData.stats.total_volume
-      ).toFixed(1);
-      collectionItem[1].averagePrice = Number.parseFloat(
-        collectionData.stats.average_price
-      ).toFixed(3);
+      collectionItem[1].floorPrice =
+        Number.parseFloat(collectionData.stats.floor_price).toFixed(3) * 1;
+      collectionItem[1].totalVolume =
+        Number.parseFloat(collectionData.stats.total_volume).toFixed(1) * 1;
+      collectionItem[1].averagePrice =
+        Number.parseFloat(collectionData.stats.average_price).toFixed(3) * 1;
       collectionItem[1].isUnrevealed = isEmptyObject(collectionData.traits);
       collectionItem[1].isEthereumCollection =
         !!collectionData.payment_tokens.find((token) => token.symbol === 'ETH');
