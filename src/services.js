@@ -6,6 +6,7 @@ const {
   MIN_FLOOR_PRICE,
   MIN_VOLUME,
   MAX_TOTAL_SUPPLY,
+  TIMEZONE,
 } = require('./constants');
 const { logger } = require('./logger');
 const { isEmptyObject, getTime, getDate } = require('./utils');
@@ -142,16 +143,19 @@ const getFilteredCollections = (collections) =>
       value.numberOfOwners <= value.totalSupply
   );
 
+const getTimezoneDate = (date) =>
+  date.toLocaleString('en-US', { timeZone: TIMEZONE });
+
 const getMessageForEmptyList = (minutes, date) =>
   `There are no bought NFTs in last ${minutes} minute${
     minutes > 1 ? 's' : ''
-  } (after ${date.toLocaleTimeString()})`;
+  } (after ${getTimezoneDate(date)})`;
 
 const getResponse = (collections, minutes, date) => {
   const formattedResponse = formatResponse(collections);
   return `Bought NFTs in last ${minutes} minute${
     minutes > 1 ? 's' : ''
-  } (after ${date.toLocaleTimeString()})\n${formattedResponse}`;
+  } (after ${getTimezoneDate(date)})\n${formattedResponse}`;
 };
 
 const getSortedCollections = (collections) =>
