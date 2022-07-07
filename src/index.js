@@ -1,7 +1,10 @@
 const { handleMessage } = require('./services');
 
 module.exports = async function App(context) {
-  const textMessage = context._requestContext?.body?.message?.text;
+  let textMessage;
+  if (context.event.isText) {
+    textMessage = context.event.text;
+  }
   const response = await handleMessage(textMessage);
 
   await context.sendMessage(response, {
