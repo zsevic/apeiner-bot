@@ -3,9 +3,10 @@ const {
   headers,
   PROTOCOLS,
   COLLECTIONS_TO_ANALYZE,
-  MIN_FLOOR_PRICE,
-  MIN_VOLUME,
   MAX_TOTAL_SUPPLY,
+  MIN_FLOOR_PRICE,
+  MIN_TOTAL_SUPPLY,
+  MIN_VOLUME,
   TIMEZONE,
 } = require('./constants');
 const { logger } = require('./logger');
@@ -137,6 +138,7 @@ const getFilteredCollections = (collections) =>
   collections.filter(
     ([, value]) =>
       value.totalSupply <= MAX_TOTAL_SUPPLY &&
+      value.totalSupply >= MIN_TOTAL_SUPPLY &&
       value.isEthereumCollection &&
       value.totalVolume > MIN_VOLUME &&
       value.floorPrice >= MIN_FLOOR_PRICE &&

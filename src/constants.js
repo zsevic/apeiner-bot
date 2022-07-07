@@ -1,4 +1,5 @@
 const COLLECTIONS_TO_ANALYZE = 7;
+const MIN_TOTAL_SUPPLY = 1000;
 const MAX_TOTAL_SUPPLY = 10000;
 const MIN_FLOOR_PRICE = 0.01;
 const MIN_VOLUME = 20;
@@ -14,6 +15,7 @@ module.exports = {
   headers,
   MAX_TOTAL_SUPPLY,
   MIN_FLOOR_PRICE,
+  MIN_TOTAL_SUPPLY,
   MIN_VOLUME,
   PROTOCOLS,
   TIMEZONE,

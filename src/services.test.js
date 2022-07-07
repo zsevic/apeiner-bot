@@ -95,6 +95,16 @@ describe('getFilteredCollections', () => {
           totalVolume: 32,
         },
       ],
+      [
+        'nft7',
+        {
+          floorPrice: 1,
+          isEthereumCollection: true,
+          numberOfOwners: 500,
+          totalSupply: 900,
+          totalVolume: 32,
+        },
+      ],
     ];
     const expectedResult = [collections[0]];
 
