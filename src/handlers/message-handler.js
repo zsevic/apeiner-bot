@@ -1,3 +1,4 @@
+const { replyMarkup } = require('../constants');
 const { handleMessage } = require('../services');
 
 async function HandleMessage(context) {
@@ -5,6 +6,7 @@ async function HandleMessage(context) {
 
   await context.sendMessage(response, {
     parseMode: 'HTML',
+    replyMarkup,
   });
 }
 

@@ -10,6 +10,28 @@ const headers = {
   'x-api-key': process.env.OPENSEA_API_KEY,
 };
 
+const replyMarkup = {
+  keyboard: [
+    [
+      {
+        text: 1,
+      },
+      {
+        text: 2,
+      },
+      {
+        text: 3,
+      },
+      {
+        text: 5,
+      },
+      {
+        text: 10,
+      },
+    ],
+  ],
+};
+
 module.exports = {
   COLLECTIONS_TO_ANALYZE,
   headers,
@@ -18,5 +40,6 @@ module.exports = {
   MIN_TOTAL_SUPPLY,
   MIN_VOLUME,
   PROTOCOLS,
+  replyMarkup,
   TIMEZONE,
 };
