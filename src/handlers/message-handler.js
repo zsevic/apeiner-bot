@@ -2,7 +2,13 @@ const { replyMarkup } = require('../constants');
 const { handleMessage } = require('../services');
 
 async function HandleMessage(context) {
-  const response = await handleMessage(context.event.text);
+  const isBotCommand = !!context.event._rawEvent.message?.entities?.find(
+    (entity) => entity.type === 'bot_command'
+  );
+  const message = isBotCommand
+    ? context.event.text.replace('/', '')
+    : context.event.text;
+  const response = await handleMessage(message);
 
   await context.sendMessage(response, {
     parseMode: 'HTML',
