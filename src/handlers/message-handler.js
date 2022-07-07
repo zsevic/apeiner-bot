@@ -1,5 +1,7 @@
 const { replyMarkup } = require('../constants');
+const { logger } = require('../logger');
 const { handleMessage } = require('../services');
+const { getTime } = require('../utils');
 
 async function HandleMessage(context) {
   const isBotCommand = !!context.event._rawEvent.message?.entities?.find(
@@ -8,7 +10,14 @@ async function HandleMessage(context) {
   const message = isBotCommand
     ? context.event.text.replace('/', '')
     : context.event.text;
-  const response = await handleMessage(message);
+  const time = getTime(message);
+  const [, minutes] = time;
+  const statusMessage = `Getting stats for last ${minutes} minute${
+    minutes !== 1 ? 's' : ''
+  }...`;
+  logger.info(statusMessage);
+  await context.sendMessage(statusMessage);
+  const response = await handleMessage(time);
 
   await context.sendMessage(response, {
     parseMode: 'HTML',

@@ -14,19 +14,19 @@ const replyMarkup = {
   keyboard: [
     [
       {
-        text: 1,
+        text: '/1',
       },
       {
-        text: 2,
+        text: '/2',
       },
       {
-        text: 3,
+        text: '/3',
       },
       {
-        text: 5,
+        text: '/5',
       },
       {
-        text: 10,
+        text: '/10',
       },
     ],
   ],

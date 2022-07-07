@@ -10,7 +10,7 @@ const {
   TIMEZONE,
 } = require('./constants');
 const { logger } = require('./logger');
-const { isEmptyObject, getTime, getDate } = require('./utils');
+const { isEmptyObject, getDate } = require('./utils');
 
 const formatResponse = (filteredCollections) =>
   filteredCollections
@@ -157,7 +157,7 @@ const getResponse = (collections, minutes, date) => {
   const formattedResponse = formatResponse(collections);
   return `Bought NFTs in last ${minutes} minute${
     minutes > 1 ? 's' : ''
-  } (after ${getTimezoneDate(date)})\n${formattedResponse}`;
+  } (after ${getTimezoneDate(date)})\n\n${formattedResponse}`;
 };
 
 const getSortedCollections = (collections) =>
@@ -165,9 +165,9 @@ const getSortedCollections = (collections) =>
     .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
     .slice(0, COLLECTIONS_TO_ANALYZE);
 
-const handleMessage = async (textMessage) => {
+const handleMessage = async (time) => {
   try {
-    const [seconds, minutes] = getTime(textMessage);
+    const [seconds, minutes] = time;
 
     const date = getDate(seconds);
     const collections = await getCollections(date);
