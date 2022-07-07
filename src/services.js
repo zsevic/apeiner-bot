@@ -185,9 +185,11 @@ const handleMessage = async (time) => {
       return getMessageForEmptyList(minutes, date);
     }
 
-    logger.info('Adding listings info...');
-    await addListingInfo(filteredCollections);
-    logger.info('Added listings info...');
+    if (process.env.NODE_ENV === 'dev') {
+      logger.info('Adding listings info...');
+      await addListingInfo(filteredCollections);
+      logger.info('Added listings info...');
+    }
 
     return getResponse(filteredCollections, minutes, date);
   } catch (error) {
