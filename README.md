@@ -6,7 +6,7 @@
 
 ### Prerequisites
 
-- Node version 18
+- Node version 17
 
 ### Setup
 
@@ -14,6 +14,7 @@
 git clone git@github.com:zsevic/apeiner-bot.git
 cd apeiner-bot
 cp .env.sample .env # change values after copying
+nvm use 17
 npm i
 npm run start:dev
 npm run telegram-webhook:set
