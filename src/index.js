@@ -1,13 +1,6 @@
-const { handleMessage } = require('./services');
+const { router, telegram } = require('bottender/router');
+const { HandleMessage } = require('./handlers/message-handler');
 
-module.exports = async function App(context) {
-  let textMessage;
-  if (context.event.isText) {
-    textMessage = context.event.text;
-  }
-  const response = await handleMessage(textMessage);
-
-  await context.sendMessage(response, {
-    parseMode: 'HTML',
-  });
+module.exports = async function App() {
+  return router([telegram.message(HandleMessage)]);
 };
