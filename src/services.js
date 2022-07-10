@@ -62,7 +62,9 @@ const formatResponse = (filteredCollections) =>
           : ''
       }owners/supply: ${result[1].numberOfOwners}/${
         result[1].totalSupply
-      }\nroyalty: ${result[1].royalty}%\n`;
+      }\ntotal sales: ${result[1].totalSales}\nroyalty: ${
+        result[1].royalty
+      }%\n`;
     })
     .join('\n');
 
@@ -115,6 +117,7 @@ const addCollectionsInfo = async (collections) =>
       collectionItem[1].totalSupply = collectionData.stats.total_supply;
       collectionItem[1].totalVolume =
         Number.parseFloat(collectionData.stats.total_volume).toFixed(1) * 1;
+      collectionItem[1].totalSales = collectionData.stats.total_sales;
     })
   );
 
