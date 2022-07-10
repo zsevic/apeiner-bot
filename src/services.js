@@ -28,11 +28,9 @@ const addMintingInfo = async (collections) =>
       }).then((res) => res.data.asset_events);
       const lastTransfer = events[events.length - 1];
       const address = lastTransfer.from_account.address;
-      logger.info(`created date: ${lastTransfer.created_date}`);
       const timestamp = new Date(lastTransfer.created_date);
       const date = new Date();
       const timeDifference = date.getTime() - timestamp.getTime();
-      logger.info(`time difference: ${timeDifference}`);
       const timeFactor = 5 * 60 * 1000;
       if (address === NULL_ADDRESS && timeDifference < timeFactor) {
         collectionItem[1].isMinting = true;
