@@ -30,7 +30,9 @@ const addMintingInfo = async (collections) =>
       const address = lastTransfer.from_account.address;
       const timestamp = new Date(lastTransfer.created_date);
       const date = new Date();
-      if (address === NULL_ADDRESS && date - timestamp < 5 * 60 * 1000) {
+      const timeDifference = date.getTime() - timestamp.getTime();
+      const timeFactor = 5 * 60 * 1000;
+      if (address === NULL_ADDRESS && timeDifference < timeFactor) {
         collectionItem[1].isMinting = true;
       }
     })
