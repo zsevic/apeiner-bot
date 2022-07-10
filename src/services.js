@@ -8,9 +8,33 @@ const {
   MIN_TOTAL_SUPPLY,
   MIN_VOLUME,
   TIMEZONE,
+  NULL_ADDRESS,
 } = require('./constants');
 const { logger } = require('./logger');
 const { isEmptyObject, getDate } = require('./utils');
+
+const addMintingInfo = async (collections) =>
+  Promise.all(
+    collections.map(async (collectionItem) => {
+      const queryParams = {
+        event_type: 'transfer',
+        token_id: collectionItem.tokenId,
+        asset_contract_address: collectionItem.contractAddress,
+        collection_slug: collectionItem.slug,
+      };
+      const events = await axios('https://api.opensea.io/api/v1/events', {
+        params: queryParams,
+        headers,
+      }).then((res) => res.data.asset_events);
+      const lastTransfer = events[events.length - 1];
+      const address = lastTransfer.from_account.address;
+      const timestamp = new Date(lastTransfer.created_date);
+      const date = new Date();
+      if (address === NULL_ADDRESS && date - timestamp < 5 * 60 * 1000) {
+        collectionItem[1].isMinting = true;
+      }
+    })
+  );
 
 const formatResponse = (filteredCollections) =>
   filteredCollections
@@ -21,10 +45,12 @@ const formatResponse = (filteredCollections) =>
       }</a>: ${result[1].numberOfSales} sale${
         result[1].numberOfSales > 1 ? 's' : ''
       }\nunique buyers: ${uniqueBuyers}\n${
-        result[1].isUnrevealed ? 'UNREVEALED\n' : ''
-      }floor: ${result[1].floorPrice}eth\naverage price: ${
-        result[1].averagePrice
-      }eth\ntotal volume: ${result[1].totalVolume}eth\n${
+        result[1].isMinting ? 'MINTING\n' : ''
+      }${result[1].isUnrevealed ? 'UNREVEALED\n' : ''}floor: ${
+        result[1].floorPrice
+      }eth\naverage price: ${result[1].averagePrice}eth\ntotal volume: ${
+        result[1].totalVolume
+      }eth\n${
         result[1].numberOfListed
           ? 'listed/supply: ' +
             result[1].numberOfListed +
@@ -74,6 +100,8 @@ const addCollectionsInfo = async (collections) =>
       }).then((res) => res.data.collection);
       collectionItem[1].averagePrice =
         Number.parseFloat(collectionData.stats.average_price).toFixed(3) * 1;
+      collectionItem[1].contractAddress =
+        collectionData.primary_asset_contracts?.[0]?.address;
       collectionItem[1].floorPrice =
         Number.parseFloat(collectionData.stats.floor_price).toFixed(3) * 1;
       collectionItem[1].isUnrevealed = isEmptyObject(collectionData.traits);
@@ -113,6 +141,7 @@ const getCollections = async (date) => {
         return;
       }
       const collectionName = event.asset?.collection?.name;
+      const tokenId = Number(event.asset?.token_id);
       if (!collectionName) return;
       const buyer = event.winner_account.address;
       if (results[collectionName]) {
@@ -122,6 +151,7 @@ const getCollections = async (date) => {
       return (results[collectionName] = {
         slug: event.asset?.collection?.slug,
         buyers: [buyer],
+        tokenId,
         numberOfSales: 1,
       });
     });
@@ -190,6 +220,10 @@ const handleMessage = async (time) => {
       await addListingInfo(filteredCollections);
       logger.info('Added listings info...');
     }
+
+    logger.info('Checking if minting is in progress...');
+    await addMintingInfo(filteredCollections);
+    logger.info('Checked if minting is in progress...');
 
     return getResponse(filteredCollections, minutes, date);
   } catch (error) {
