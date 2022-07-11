@@ -9,6 +9,7 @@ const {
   MIN_VOLUME,
   TIMEZONE,
   NULL_ADDRESS,
+  ETH,
 } = require('./constants');
 const { logger } = require('./logger');
 const { isEmptyObject, getDate } = require('./utils');
@@ -113,7 +114,7 @@ const addCollectionsInfo = async (collections) =>
         Number.parseFloat(collectionData.stats.floor_price).toFixed(3) * 1;
       collectionItem[1].isUnrevealed = isEmptyObject(collectionData.traits);
       collectionItem[1].isEthereumCollection =
-        !!collectionData.payment_tokens.find((token) => token.symbol === 'ETH');
+        !!collectionData.payment_tokens.find((token) => token.symbol === ETH);
       collectionItem[1].numberOfOwners = collectionData.stats.num_owners;
       collectionItem[1].royalty =
         Number(collectionData.dev_seller_fee_basis_points) / 100;
@@ -146,6 +147,9 @@ const getCollections = async (date) => {
     response.asset_events.forEach((event) => {
       const schemaNema = event.asset?.asset_contract?.schema_name;
       if (!PROTOCOLS.includes(schemaNema)) {
+        return;
+      }
+      if (event.payment_token?.symbol !== ETH) {
         return;
       }
       const collectionName = event.asset?.collection?.name;

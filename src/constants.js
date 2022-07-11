@@ -1,4 +1,5 @@
 const COLLECTIONS_TO_ANALYZE = 7;
+const ETH = 'ETH';
 const MIN_TOTAL_SUPPLY = 1000;
 const MAX_TOTAL_SUPPLY = 10000;
 const MIN_FLOOR_PRICE = 0.01;
@@ -35,6 +36,7 @@ const replyMarkup = {
 
 module.exports = {
   COLLECTIONS_TO_ANALYZE,
+  ETH,
   headers,
   MAX_TOTAL_SUPPLY,
   MIN_FLOOR_PRICE,
