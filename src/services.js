@@ -18,16 +18,19 @@ const addMintingInfo = async (collections) =>
     collections.map(async (collectionItem) => {
       const queryParams = {
         event_type: 'transfer',
-        token_id: collectionItem.tokenId,
-        asset_contract_address: collectionItem.contractAddress,
-        collection_slug: collectionItem.slug,
+        token_id: collectionItem[1].tokenId,
+        asset_contract_address: collectionItem[1].contractAddress,
+        collection_slug: collectionItem[1].slug,
       };
       const events = await axios('https://api.opensea.io/api/v1/events', {
         params: queryParams,
         headers,
       }).then((res) => res.data.asset_events);
       const lastTransfer = events[events.length - 1];
-      const address = lastTransfer.from_account.address;
+      if (!lastTransfer) {
+        return;
+      }
+      const address = lastTransfer?.from_account?.address;
       const timestamp = new Date(lastTransfer.created_date);
       const date = new Date();
       const timeDifference = date.getTime() - timestamp.getTime();
