@@ -10,6 +10,7 @@ const {
   TIMEZONE,
   NULL_ADDRESS,
   ETH,
+  WETH,
 } = require('./constants');
 const { logger } = require('./logger');
 const { isEmptyObject, getDate } = require('./utils');
@@ -149,7 +150,7 @@ const getCollections = async (date) => {
       if (!PROTOCOLS.includes(schemaNema)) {
         return;
       }
-      if (event.payment_token?.symbol !== ETH) {
+      if (![ETH, WETH].includes(event.payment_token?.symbol)) {
         return;
       }
       const collectionName = event.asset?.collection?.name;
