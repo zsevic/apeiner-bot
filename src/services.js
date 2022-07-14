@@ -234,9 +234,9 @@ const handleMessage = async (time) => {
       logger.info('Added listings info...');
     }
 
-    logger.info('Checking if minting is in progress...');
+    logger.info('Adding minting info...');
     await addMintingInfo(filteredCollections);
-    logger.info('Checked if minting is in progress...');
+    logger.info('Added minting info...');
 
     return getResponse(filteredCollections, minutes, date);
   } catch (error) {
