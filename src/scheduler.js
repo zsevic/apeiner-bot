@@ -12,7 +12,7 @@ const setupScheduler = () =>
   new CronJob(
     '* * * * *',
     async function () {
-      const time = getTime('/1');
+      const time = getTime('1');
       const [, minutes] = time;
       const statusMessage = `Getting stats for last ${minutes} minute${
         minutes !== 1 ? 's' : ''
