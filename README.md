@@ -1,6 +1,6 @@
 # apeiner-bot
 
-> Telegram chatbot for sending alerts about trending NFT collections
+> Telegram chatbot for sending stats about trending NFT collections
 
 ## Getting started
 
@@ -35,7 +35,7 @@ npm test
 
 ### Technologies used
 
-- Node.js, Bottender
+- Node.js, Express, Cron, Bottender
 
 ## Chatbot setup
 
