@@ -8,7 +8,7 @@ const { getTime } = require('./utils');
 const client = getClient('telegram');
 const chatId = '1618850255';
 
-const setupScheduler = () => {
+const setupScheduler = () =>
   new CronJob(
     '* * * * *',
     async function () {
@@ -30,7 +30,6 @@ const setupScheduler = () => {
     true,
     'Europe/Belgrade'
   );
-};
 
 module.exports = {
   setupScheduler,
