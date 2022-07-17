@@ -51,6 +51,14 @@ const formatResponse = (filteredCollections) =>
         result[0]
       }</a>: ${result[1].numberOfSales} sale${
         result[1].numberOfSales > 1 ? 's' : ''
+      }${
+        result[1].acceptedBids > 0
+          ? ' (' +
+            result[1].acceptedBids +
+            ' accepted bid' +
+            (result[1].acceptedBids > 1 ? 's' : '') +
+            ')'
+          : ''
       }\nunique buyers: ${uniqueBuyers}\n${
         result[1].isMinting ? 'MINTING\n' : ''
       }${result[1].isUnrevealed ? 'UNREVEALED\n' : ''}floor: ${
@@ -156,13 +164,17 @@ const getCollections = async (date) => {
       const collectionName = event.asset?.collection?.name;
       const tokenId = Number(event.asset?.token_id);
       if (!collectionName) return;
+      const isAcceptedBid = event.payment_token?.symbol === WETH;
       const buyer = event.winner_account.address;
       if (results[collectionName]) {
         results[collectionName].buyers.push(buyer);
-        return (results[collectionName].numberOfSales += 1);
+        results[collectionName].numberOfSales += 1;
+        results[collectionName].acceptedBids += isAcceptedBid ? 1 : 0;
+        return;
       }
       return (results[collectionName] = {
         slug: event.asset?.collection?.slug,
+        acceptedBids: isAcceptedBid ? 1 : 0,
         buyers: [buyer],
         tokenId,
         numberOfSales: 1,
