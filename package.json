@@ -10,7 +10,7 @@
     "lint": "eslint . ",
     "lint:fix": "npm run lint -- --fix",
     "start": "node server.js",
-    "telegram-webhook:set": "echo 'Y' | npx bottender telegram webhook set",
+    "telegram-webhook:set": "echo 'Y' | bottender telegram webhook set -w $1",
     "test": "jest"
   },
   "dependencies": {

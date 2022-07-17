@@ -16,8 +16,9 @@ cd apeiner-bot
 cp .env.sample .env # change values after copying
 nvm use 17
 npm i
-npm run start:dev
-npm run telegram-webhook:set
+npm run dev
+npx ngrok http 5000
+npm run telegram-webhook:set <URL>/webhooks/telegram
 ```
 
 ### Linting
@@ -36,9 +37,3 @@ npm test
 ### Technologies used
 
 - Node.js, Express, Cron, Bottender
-
-## Chatbot setup
-
-```bash
-npx bottender telegram webhook set -w https://lionfish-app-rgbxa.ondigitalocean.app/webhooks/telegram
-```
