@@ -10,6 +10,8 @@ app
   .prepare()
   .then(() => {
     setupCustomServer(app);
-    setupScheduler();
+    if (process.env.NODE_ENV !== 'dev') {
+      setupScheduler();
+    }
   })
   .catch(console.error);

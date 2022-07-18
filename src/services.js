@@ -165,16 +165,17 @@ const getCollections = async (date) => {
       const tokenId = Number(event.asset?.token_id);
       if (!collectionName) return;
       const isAcceptedBid = event.payment_token?.symbol === WETH;
+      const acceptedBids = isAcceptedBid ? 1 : 0;
       const buyer = event.winner_account.address;
       if (results[collectionName]) {
         results[collectionName].buyers.push(buyer);
         results[collectionName].numberOfSales += 1;
-        results[collectionName].acceptedBids += isAcceptedBid ? 1 : 0;
+        results[collectionName].acceptedBids += acceptedBids;
         return;
       }
       return (results[collectionName] = {
         slug: event.asset?.collection?.slug,
-        acceptedBids: isAcceptedBid ? 1 : 0,
+        acceptedBids,
         buyers: [buyer],
         tokenId,
         numberOfSales: 1,
