@@ -143,6 +143,7 @@ const getCollections = async (date) => {
   do {
     const queryParams = {
       event_type: 'successful',
+      only_opensea: false,
       occurred_after: Math.floor(date.getTime() / 1000),
       ...(next && { cursor: next }),
     };

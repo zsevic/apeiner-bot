@@ -9,6 +9,8 @@ const NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 const PROTOCOLS = ['ERC721', 'ERC1155'];
 const TIMEZONE = 'Europe/Belgrade';
 
+const CHAT_ID = 1618850255;
+
 const headers = {
   'x-api-key': process.env.OPENSEA_API_KEY,
 };
@@ -36,6 +38,7 @@ const replyMarkup = {
 };
 
 module.exports = {
+  CHAT_ID,
   COLLECTIONS_TO_ANALYZE,
   ETH,
   WETH,
