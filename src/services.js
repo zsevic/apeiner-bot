@@ -43,16 +43,22 @@ const addMintingInfo = async (collections) =>
     })
   );
 
+const getPricesRange = (prices) => {
+  const minPrice = Math.min(...prices);
+  const maxPrice = Math.max(...prices);
+
+  if (minPrice === maxPrice) {
+    return `${minPrice}eth`;
+  }
+
+  return `${minPrice} - ${maxPrice}eth`;
+};
+
 const formatResponse = (filteredCollections) =>
   filteredCollections
     .map((result) => {
       const uniqueBuyers = [...new Set(result[1].buyers)].length;
-      const price =
-        result[1].prices.length === 1
-          ? `${result[1].prices[0]}eth`
-          : `${Math.min(...result[1].prices)} - ${Math.max(
-              ...result[1].prices
-            )}eth`;
+      const price = getPricesRange(result[1].prices);
       return `<a href="https://opensea.io/collection/${result[1].slug}">${
         result[0]
       }</a>: ${result[1].numberOfSales} sale${
