@@ -50,7 +50,7 @@ const formatResponse = (filteredCollections) =>
       const price =
         result[1].prices.length === 1
           ? `${result[1].prices[0]}eth`
-          : `${Math.min(...result[1].prices)}-${Math.max(
+          : `${Math.min(...result[1].prices)} - ${Math.max(
               ...result[1].prices
             )}eth`;
       return `<a href="https://opensea.io/collection/${result[1].slug}">${
