@@ -47,6 +47,12 @@ const formatResponse = (filteredCollections) =>
   filteredCollections
     .map((result) => {
       const uniqueBuyers = [...new Set(result[1].buyers)].length;
+      const price =
+        result[1].prices.length === 1
+          ? `${result[1].prices[0]}eth`
+          : `${Math.min(...result[1].prices)}-${Math.max(
+              ...result[1].prices
+            )}eth`;
       return `<a href="https://opensea.io/collection/${result[1].slug}">${
         result[0]
       }</a>: ${result[1].numberOfSales} sale${
@@ -63,9 +69,9 @@ const formatResponse = (filteredCollections) =>
         result[1].isMinting ? 'MINTING\n' : ''
       }${result[1].isUnrevealed ? 'UNREVEALED\n' : ''}floor: ${
         result[1].floorPrice
-      }eth\naverage price: ${result[1].averagePrice}eth\ntotal volume: ${
-        result[1].totalVolume
-      }eth\n${
+      }eth\nsold for ${price}\naverage price: ${
+        result[1].averagePrice
+      }eth\ntotal volume: ${result[1].totalVolume}eth\n${
         result[1].numberOfListed
           ? 'listed/supply: ' +
             result[1].numberOfListed +
@@ -168,19 +174,23 @@ const getCollections = async (date) => {
       const isAcceptedBid = event.payment_token?.symbol === WETH;
       const acceptedBids = isAcceptedBid ? 1 : 0;
       const buyer = event.winner_account.address;
+      const price = Number(event.total_price) / 10 ** 18;
       if (results[collectionName]) {
         results[collectionName].buyers.push(buyer);
         results[collectionName].numberOfSales += 1;
         results[collectionName].acceptedBids += acceptedBids;
+        results[collectionName].prices.push(price);
         return;
       }
-      return (results[collectionName] = {
+      results[collectionName] = {
         slug: event.asset?.collection?.slug,
         acceptedBids,
         buyers: [buyer],
+        prices: [price],
         tokenId,
         numberOfSales: 1,
-      });
+      };
+      return;
     });
     requestNumber += 1;
     logger.info(

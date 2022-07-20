@@ -10,7 +10,7 @@ describe('formatResponse', () => {
       [
         'nft',
         {
-          acceptedBids: 1,
+          acceptedBids: 2,
           averagePrice: 0.4,
           buyers: ['0x1234', '0x1234', '0x1235', '0x1236'],
           floorPrice: 0.5,
@@ -19,6 +19,7 @@ describe('formatResponse', () => {
           numberOfListed: 2000,
           numberOfOwners: 3000,
           numberOfSales: 4,
+          prices: [0.5, 0.9, 0.7, 0.2],
           royalty: 2.5,
           slug: 'nft',
           totalSales: 1203,
@@ -26,8 +27,28 @@ describe('formatResponse', () => {
           totalVolume: 34,
         },
       ],
+      [
+        'nft2',
+        {
+          acceptedBids: 1,
+          averagePrice: 0.4,
+          buyers: ['0x1234', '0x1234', '0x1235', '0x1236'],
+          floorPrice: 0.5,
+          isMinting: true,
+          isUnrevealed: true,
+          numberOfListed: 2000,
+          numberOfOwners: 3000,
+          numberOfSales: 1,
+          prices: [0.5],
+          royalty: 2.5,
+          slug: 'nft2',
+          totalSales: 1203,
+          totalSupply: 5000,
+          totalVolume: 34,
+        },
+      ],
     ];
-    const expectedResult = `<a href="https://opensea.io/collection/nft">nft</a>: 4 sales (1 accepted bid)\nunique buyers: 3\nMINTING\nUNREVEALED\nfloor: 0.5eth\naverage price: 0.4eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\ntotal sales: 1203\nroyalty: 2.5%\n`;
+    const expectedResult = `<a href="https://opensea.io/collection/nft">nft</a>: 4 sales (2 accepted bids)\nunique buyers: 3\nMINTING\nUNREVEALED\nfloor: 0.5eth\nsold for 0.2-0.9eth\naverage price: 0.4eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\ntotal sales: 1203\nroyalty: 2.5%\n\n<a href="https://opensea.io/collection/nft2">nft2</a>: 1 sale (1 accepted bid)\nunique buyers: 3\nMINTING\nUNREVEALED\nfloor: 0.5eth\nsold for 0.5eth\naverage price: 0.4eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\ntotal sales: 1203\nroyalty: 2.5%\n`;
 
     const result = formatResponse(collections);
 
