@@ -73,9 +73,9 @@ const formatResponse = (filteredCollections) =>
           : ''
       }\nunique buyers: ${uniqueBuyers}\n${
         result[1].isMinting ? 'MINTING\n' : ''
-      }${result[1].isUnrevealed ? 'UNREVEALED\n' : ''}floor: ${
-        result[1].floorPrice
-      }eth\nsold for ${price}\naverage price: ${
+      }${
+        result[1].isUnrevealed ? 'UNREVEALED\n' : ''
+      }sold for ${price}\nfloor: ${result[1].floorPrice}eth\naverage price: ${
         result[1].averagePrice
       }eth\ntotal volume: ${result[1].totalVolume}eth\n${
         result[1].numberOfListed
