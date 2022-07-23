@@ -44,8 +44,8 @@ const addMintingInfo = async (collections) =>
   );
 
 const getPricesRange = (prices) => {
-  const minPrice = Math.min(...prices);
-  const maxPrice = Math.max(...prices);
+  const minPrice = Number.parseFloat(Math.min(...prices)).toFixed(3) * 1;
+  const maxPrice = Number.parseFloat(Math.max(...prices)).toFixed(3) * 1;
 
   if (minPrice === maxPrice) {
     return `${minPrice}eth`;
