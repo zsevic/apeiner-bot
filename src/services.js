@@ -89,11 +89,13 @@ const formatResponse = (filteredCollections) =>
             result[1].totalSupply +
             '\n'
           : ''
-      }owners/supply: ${result[1].numberOfOwners}/${result[1].totalSupply}\n${
+      }${
         result[1].oneDaySales
           ? 'one day sales: ' + result[1].oneDaySales + '\n'
           : ''
-      }total sales: ${result[1].totalSales}\nroyalty: ${result[1].royalty}%\n`;
+      }total sales: ${result[1].totalSales}\nowners/supply: ${
+        result[1].numberOfOwners
+      }/${result[1].totalSupply}\nroyalty: ${result[1].royalty}%\n`;
     })
     .join('\n');
 
