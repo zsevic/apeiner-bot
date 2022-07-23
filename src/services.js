@@ -89,11 +89,11 @@ const formatResponse = (filteredCollections) =>
             result[1].totalSupply +
             '\n'
           : ''
-      }owners/supply: ${result[1].numberOfOwners}/${
-        result[1].totalSupply
-      }\ntotal sales: ${result[1].totalSales}\nroyalty: ${
-        result[1].royalty
-      }%\n`;
+      }owners/supply: ${result[1].numberOfOwners}/${result[1].totalSupply}\n${
+        result[1].oneDaySales
+          ? 'one day sales: ' + result[1].oneDaySales + '\n'
+          : ''
+      }total sales: ${result[1].totalSales}\nroyalty: ${result[1].royalty}%\n`;
     })
     .join('\n');
 
@@ -138,6 +138,15 @@ const addCollectionsInfo = async (collections) =>
       if (totalVolume !== oneDayVolume) {
         collectionItem[1].oneDayVolume = oneDayVolume;
       }
+
+      const totalSales =
+        Number.parseFloat(collectionData.stats.total_sales).toFixed(1) * 1;
+      const oneDaySales =
+        Number.parseFloat(collectionData.stats.one_day_sales).toFixed(1) * 1;
+      if (totalSales !== oneDaySales) {
+        collectionItem[1].oneDaySales = oneDaySales;
+      }
+
       collectionItem[1].averagePrice =
         Number.parseFloat(collectionData.stats.average_price).toFixed(3) * 1;
       collectionItem[1].contractAddress =
@@ -152,7 +161,7 @@ const addCollectionsInfo = async (collections) =>
         Number(collectionData.dev_seller_fee_basis_points) / 100;
       collectionItem[1].totalSupply = collectionData.stats.total_supply;
       collectionItem[1].totalVolume = totalVolume;
-      collectionItem[1].totalSales = collectionData.stats.total_sales;
+      collectionItem[1].totalSales = totalSales;
     })
   );
 
