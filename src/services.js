@@ -77,7 +77,11 @@ const formatResponse = (filteredCollections) =>
         result[1].isUnrevealed ? 'UNREVEALED\n' : ''
       }sold for ${price}\nfloor: ${result[1].floorPrice}eth\naverage price: ${
         result[1].averagePrice
-      }eth\n${result[1].oneDayVolume ? 'one day volume: ' + result[1].oneDayVolume + 'eth\n' : ''}total volume: ${result[1].totalVolume}eth\n${
+      }eth\n${
+        result[1].oneDayVolume
+          ? 'one day volume: ' + result[1].oneDayVolume + 'eth\n'
+          : ''
+      }total volume: ${result[1].totalVolume}eth\n${
         result[1].numberOfListed
           ? 'listed/supply: ' +
             result[1].numberOfListed +
@@ -127,8 +131,10 @@ const addCollectionsInfo = async (collections) =>
       const collectionData = await axios(url, {
         headers,
       }).then((res) => res.data.collection);
-      const totalVolume = Number.parseFloat(collectionData.stats.total_volume).toFixed(1) * 1;
-      const oneDayVolume = Number.parseFloat(collectionData.stats.one_day_volume).toFixed(1) * 1;
+      const totalVolume =
+        Number.parseFloat(collectionData.stats.total_volume).toFixed(1) * 1;
+      const oneDayVolume =
+        Number.parseFloat(collectionData.stats.one_day_volume).toFixed(1) * 1;
       if (totalVolume !== oneDayVolume) {
         collectionItem[1].oneDayVolume = oneDayVolume;
       }
