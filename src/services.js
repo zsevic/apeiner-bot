@@ -77,7 +77,7 @@ const formatResponse = (filteredCollections) =>
         result[1].isUnrevealed ? 'UNREVEALED\n' : ''
       }sold for ${price}\nfloor: ${result[1].floorPrice}eth\naverage price: ${
         result[1].averagePrice
-      }eth\ntotal volume: ${result[1].totalVolume}eth\n${
+      }eth\n${result[1].oneDayVolume ? 'one day volume: ' + result[1].oneDayVolume + 'eth\n' : ''}total volume: ${result[1].totalVolume}eth\n${
         result[1].numberOfListed
           ? 'listed/supply: ' +
             result[1].numberOfListed +
@@ -127,6 +127,11 @@ const addCollectionsInfo = async (collections) =>
       const collectionData = await axios(url, {
         headers,
       }).then((res) => res.data.collection);
+      const totalVolume = Number.parseFloat(collectionData.stats.total_volume).toFixed(1) * 1;
+      const oneDayVolume = Number.parseFloat(collectionData.stats.one_day_volume).toFixed(1) * 1;
+      if (totalVolume !== oneDayVolume) {
+        collectionItem[1].oneDayVolume = oneDayVolume;
+      }
       collectionItem[1].averagePrice =
         Number.parseFloat(collectionData.stats.average_price).toFixed(3) * 1;
       collectionItem[1].contractAddress =
@@ -140,8 +145,7 @@ const addCollectionsInfo = async (collections) =>
       collectionItem[1].royalty =
         Number(collectionData.dev_seller_fee_basis_points) / 100;
       collectionItem[1].totalSupply = collectionData.stats.total_supply;
-      collectionItem[1].totalVolume =
-        Number.parseFloat(collectionData.stats.total_volume).toFixed(1) * 1;
+      collectionItem[1].totalVolume = totalVolume;
       collectionItem[1].totalSales = collectionData.stats.total_sales;
     })
   );

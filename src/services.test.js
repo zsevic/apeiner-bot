@@ -19,6 +19,7 @@ describe('formatResponse', () => {
           numberOfListed: 2000,
           numberOfOwners: 3000,
           numberOfSales: 4,
+          oneDayVolume: 22,
           prices: [0.5, 0.9, 0.7, 0.2],
           royalty: 2.5,
           slug: 'nft',
@@ -48,7 +49,7 @@ describe('formatResponse', () => {
         },
       ],
     ];
-    const expectedResult = `<a href="https://opensea.io/collection/nft">nft</a>: 4 sales (2 accepted bids)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.2 - 0.9eth\nfloor: 0.5eth\naverage price: 0.4eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\ntotal sales: 1203\nroyalty: 2.5%\n\n<a href="https://opensea.io/collection/nft2">nft2</a>: 1 sale (1 accepted bid)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.5eth\nfloor: 0.5eth\naverage price: 0.4eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\ntotal sales: 1203\nroyalty: 2.5%\n`;
+    const expectedResult = `<a href="https://opensea.io/collection/nft">nft</a>: 4 sales (2 accepted bids)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.2 - 0.9eth\nfloor: 0.5eth\naverage price: 0.4eth\none day volume: 22eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\ntotal sales: 1203\nroyalty: 2.5%\n\n<a href="https://opensea.io/collection/nft2">nft2</a>: 1 sale (1 accepted bid)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.5eth\nfloor: 0.5eth\naverage price: 0.4eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\ntotal sales: 1203\nroyalty: 2.5%\n`;
 
     const result = formatResponse(collections);
 
