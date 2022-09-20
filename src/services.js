@@ -91,7 +91,7 @@ const formatResponse = (filteredCollections) =>
           : ''
       }owners/supply: ${result[1].numberOfOwners}/${
         result[1].totalSupply
-      }\nroyalty: ${result[1].royalty}%\ncreated: ${result[1].createdDate}\n`;
+      }\nroyalty: ${result[1].royalty}%\ncreation date: ${result[1].createdDate}\n`;
     })
     .join('\n');
 
