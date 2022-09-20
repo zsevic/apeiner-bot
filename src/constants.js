@@ -18,6 +18,7 @@ const headers = {
   'x-build-id': '7c4e8c11cb0844796e38aa3cf13f29e1221267b3',
 };
 const OPENSEA_API_BASE_URL = 'https://opensea.io/__api/graphql/';
+const COLLECTION_RETRIEVAL_COUNTER = 100;
 
 const replyMarkup = {
   keyboard: [
@@ -44,6 +45,7 @@ const replyMarkup = {
 module.exports = {
   CHAT_ID,
   COLLECTIONS_TO_ANALYZE,
+  COLLECTION_RETRIEVAL_COUNTER,
   DATETIME_FORMAT,
   ETH,
   WETH,
