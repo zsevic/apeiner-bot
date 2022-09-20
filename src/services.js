@@ -14,7 +14,7 @@ const {
   DATETIME_FORMAT,
 } = require('./constants');
 const { logger } = require('./logger');
-const { getDate } = require('./utils');
+const { getDate, createDate } = require('./utils');
 
 const addMintingInfo = async (collections) =>
   Promise.all(
@@ -117,11 +117,7 @@ const addCollectionsInfo = async (collections) =>
       const stats = collectionData.statsV2;
       collectionItem[1].contractAddress =
         collectionData.assetContracts?.edges?.[0]?.node?.address;
-      collectionItem[1].createdDate = new Intl.DateTimeFormat(DATETIME_FORMAT, {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }).format(new Date(collectionData.createdDate));
+      collectionItem[1].createdDate = createDate(collectionData.createdDate);
       collectionItem[1].floorPrice =
         stats.floorPrice?.unit &&
         Number.parseFloat(stats.floorPrice.unit).toFixed(3) * 1;

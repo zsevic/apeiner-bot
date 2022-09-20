@@ -3,6 +3,7 @@ const {
   getSortedCollections,
   getFilteredCollections,
 } = require('./services');
+const { createDate } = require('./utils');
 
 describe('formatResponse', () => {
   it('should format response', () => {
@@ -11,8 +12,8 @@ describe('formatResponse', () => {
         'nft',
         {
           acceptedBids: 2,
-          averagePrice: 0.4,
           buyers: ['0x1234', '0x1234', '0x1235', '0x1236'],
+          createdDate: createDate('2020-12-12'),
           floorPrice: 0.5,
           isMinting: true,
           isUnrevealed: true,
@@ -23,7 +24,6 @@ describe('formatResponse', () => {
           prices: [0.5, 0.9, 0.7, 0.2],
           royalty: 2.5,
           slug: 'nft',
-          totalSales: 1203,
           totalSupply: 5000,
           totalVolume: 34,
         },
@@ -32,8 +32,8 @@ describe('formatResponse', () => {
         'nft2',
         {
           acceptedBids: 1,
-          averagePrice: 0.4,
           buyers: ['0x1234', '0x1234', '0x1235', '0x1236'],
+          createdDate: createDate('2020-12-12'),
           floorPrice: 0.5,
           isMinting: true,
           isUnrevealed: true,
@@ -44,13 +44,12 @@ describe('formatResponse', () => {
           prices: [0.5],
           royalty: 2.5,
           slug: 'nft2',
-          totalSales: 1203,
           totalSupply: 5000,
           totalVolume: 34,
         },
       ],
     ];
-    const expectedResult = `<a href="https://opensea.io/collection/nft">nft</a>: 4 sales (2 accepted bids)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.2 - 0.9eth\nfloor: 0.5eth\naverage price: 0.4eth\none day volume: 22eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\ntotal sales: 1203\nowners/supply: 3000/5000\nroyalty: 2.5%\n\n<a href="https://opensea.io/collection/nft2">nft2</a>: 1 sale (1 accepted bid)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.5eth\nfloor: 0.5eth\naverage price: 0.4eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\none day sales: 200\ntotal sales: 1203\nowners/supply: 3000/5000\nroyalty: 2.5%\n`;
+    const expectedResult = `<a href="https://opensea.io/collection/nft">nft</a>: 4 sales (2 accepted bids)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.2 - 0.9eth\nfloor: 0.5eth\none day volume: 22eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n\n<a href="https://opensea.io/collection/nft2">nft2</a>: 1 sale (1 accepted bid)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.5eth\nfloor: 0.5eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\none day sales: 200\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n`;
 
     const result = formatResponse(collections);
 
@@ -76,16 +75,6 @@ describe('getFilteredCollections', () => {
         {
           floorPrice: 0.005,
           isEthereumCollection: true,
-          numberOfOwners: 3000,
-          totalSupply: 4000,
-          totalVolume: 32,
-        },
-      ],
-      [
-        'nft3',
-        {
-          floorPrice: 1,
-          isEthereumCollection: false,
           numberOfOwners: 3000,
           totalSupply: 4000,
           totalVolume: 32,

@@ -1,4 +1,4 @@
-const isEmptyObject = (obj) => Object.keys(obj).length === 0;
+const { DATETIME_FORMAT } = require('./constants');
 
 const getTime = (message) => {
   const minutes = [1, 2, 3, 5, 10];
@@ -13,6 +13,13 @@ const getTime = (message) => {
   return [seconds, chosenMinutes];
 };
 
+const createDate = (date) =>
+  new Intl.DateTimeFormat(DATETIME_FORMAT, {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(date));
+
 const getDate = (seconds) => {
   const date = new Date();
   const updatedDate = new Date();
@@ -22,7 +29,7 @@ const getDate = (seconds) => {
 };
 
 module.exports = {
-  isEmptyObject,
+  createDate,
   getDate,
   getTime,
 };
