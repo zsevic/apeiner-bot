@@ -7,6 +7,7 @@ const MIN_FLOOR_PRICE = 0.01;
 const MIN_VOLUME = 20;
 const NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 const PROTOCOLS = ['ERC721', 'ERC1155'];
+const DATETIME_FORMAT = 'en-GB';
 const TIMEZONE = 'Europe/Belgrade';
 
 const CHAT_ID = 1618850255;
@@ -43,6 +44,7 @@ const replyMarkup = {
 module.exports = {
   CHAT_ID,
   COLLECTIONS_TO_ANALYZE,
+  DATETIME_FORMAT,
   ETH,
   WETH,
   headers,

@@ -10,6 +10,7 @@ const {
   TIMEZONE,
   NULL_ADDRESS,
   WETH,
+  DATETIME_FORMAT,
 } = require('./constants');
 const { logger } = require('./logger');
 const { isEmptyObject, getDate } = require('./utils');
@@ -92,7 +93,7 @@ const formatResponse = (filteredCollections) =>
           : ''
       }owners/supply: ${result[1].numberOfOwners}/${
         result[1].totalSupply
-      }\nroyalty: ${result[1].royalty}%\n`;
+      }\nroyalty: ${result[1].royalty}%\ncreated: ${result[1].createdDate}\n`;
     })
     .join('\n');
 
@@ -113,7 +114,13 @@ const addCollectionsInfo = async (collections) =>
       const stats = collectionData.statsV2;
       collectionItem[1].contractAddress =
         collectionData.assetContracts?.edges?.[0]?.node?.address;
+      collectionItem[1].createdDate = new Intl.DateTimeFormat(DATETIME_FORMAT, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }).format(new Date(collectionData.createdDate));
       collectionItem[1].floorPrice =
+        stats.floorPrice?.unit &&
         Number.parseFloat(stats.floorPrice.unit).toFixed(3) * 1;
       collectionItem[1].isUnrevealed = collectionData.stringTraits.length <= 1;
       collectionItem[1].numberOfOwners = stats.numOwners;
