@@ -12,8 +12,11 @@ const TIMEZONE = 'Europe/Belgrade';
 const CHAT_ID = 1618850255;
 
 const headers = {
-  'x-api-key': process.env.OPENSEA_API_KEY,
+  accept: '*/*',
+  'content-type': 'application/json',
+  'x-build-id': '7c4e8c11cb0844796e38aa3cf13f29e1221267b3',
 };
+const OPENSEA_API_BASE_URL = 'https://opensea.io/__api/graphql/';
 
 const replyMarkup = {
   keyboard: [
@@ -48,6 +51,7 @@ module.exports = {
   MIN_TOTAL_SUPPLY,
   MIN_VOLUME,
   NULL_ADDRESS,
+  OPENSEA_API_BASE_URL,
   PROTOCOLS,
   replyMarkup,
   TIMEZONE,
