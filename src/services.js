@@ -34,7 +34,7 @@ const addMintingInfo = async (collections) =>
         return;
       }
       const address = lastTransfer?.node?.fromAccount?.address;
-      const timestamp = new Date(lastTransfer.eventTimestamp + '.000Z');
+      const timestamp = new Date(lastTransfer?.node?.eventTimestamp + '.000Z');
       const date = new Date();
       const timeDifference = date.getTime() - timestamp.getTime();
       const timeFactor = 5 * 60 * 60 * 1000;
