@@ -166,7 +166,7 @@ const getCollections = async (date) => {
         break;
       }
       const collectionName = node?.collection?.name;
-      if (!collectionName) return;
+      if (!collectionName) continue;
       const tokenId = Number(node?.item?.tokenId);
       const isAcceptedBid = node?.payment?.symbol === WETH;
       const acceptedBids = isAcceptedBid ? 1 : 0;
