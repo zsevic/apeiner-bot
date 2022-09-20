@@ -156,8 +156,15 @@ const getCollections = async (date) => {
       .then((res) => res.data.data.assetEvents);
     cursor = response.pageInfo.endCursor;
     newItems = response.edges.length || 0;
-    response.edges.forEach((event) => {
+    for (const event of response.edges) {
       const node = event?.node;
+      if (
+        new Date(node.eventTimestamp + '.000Z').getTime() <
+        new Date(date).getTime()
+      ) {
+        cursor = null;
+        break;
+      }
       const collectionName = node?.collection?.name;
       if (!collectionName) return;
       const tokenId = Number(node?.item?.tokenId);
@@ -170,7 +177,7 @@ const getCollections = async (date) => {
         results[collectionName].numberOfSales += 1;
         results[collectionName].acceptedBids += acceptedBids;
         results[collectionName].prices.push(price);
-        return;
+        continue;
       }
       results[collectionName] = {
         slug: node?.collection?.slug,
@@ -180,8 +187,7 @@ const getCollections = async (date) => {
         tokenId,
         numberOfSales: 1,
       };
-      return;
-    });
+    }
     requestNumber += 1;
     logger.info(`Got ${newItems} events, finished ${requestNumber}. request`);
   } while (cursor && newItems !== 0 && requestNumber <= 10);
