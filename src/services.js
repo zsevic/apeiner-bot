@@ -11,7 +11,6 @@ const {
   TIMEZONE,
   NULL_ADDRESS,
   WETH,
-  DATETIME_FORMAT,
 } = require('./constants');
 const { logger } = require('./logger');
 const { getDate, createDate } = require('./utils');
