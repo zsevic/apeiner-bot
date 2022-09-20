@@ -16,6 +16,7 @@ module.exports = {
         singleQuote: true,
       },
     ],
+    'no-useless-escape': 'warn',
   },
   plugins: ['prettier'],
   overrides: [
