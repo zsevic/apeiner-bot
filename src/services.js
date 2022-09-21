@@ -27,7 +27,8 @@ const addMintingInfo = async (collections) =>
               '271a4f18899705c51c47b85daee8848ef9b0eb59610db733d09b10d8e58f9256',
           },
         })
-        .then((res) => res.data.data.assetEvents.edges);
+        .then((res) => res.data.data?.assetEvents?.edges);
+      if (!events?.length) return;
       const lastTransfer = events[events.length - 1];
       if (!lastTransfer) {
         return;
