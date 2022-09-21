@@ -1,9 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 
-const setupCustomServer = (app) => {
-  const port = Number(process.env.PORT) || 5000;
-
+const setupCustomServer = (app, port) => {
   // the request handler of the bottender app
   const handle = app.getRequestHandler();
 
