@@ -95,7 +95,11 @@ const formatResponse = (filteredCollections) =>
         result[1].totalSupply
       }\nroyalty: ${result[1].royalty}%\ncreation date: ${
         result[1].createdDate
-      }\n`;
+      }\n${
+        result[1].twitterUsername
+          ? `<a href="https://twitter.com/${result[1].twitterUsername}">twitter</a>\n`
+          : ''
+      }`;
     })
     .join('\n');
 
@@ -128,6 +132,8 @@ const addCollectionsInfo = async (collections) =>
       collectionItem[1].totalSupply = stats.totalSupply;
       collectionItem[1].totalVolume =
         Number.parseFloat(stats.totalVolume.unit).toFixed(1) * 1;
+      collectionItem[1].twitterUsername =
+        collectionData.connectedTwitterUsername;
     })
   );
 
