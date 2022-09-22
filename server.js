@@ -13,9 +13,10 @@ const setWebhookUrl = (url) =>
 
 (async () => {
   let url;
+  let port;
   try {
     await app.prepare();
-    const port = Number(process.env.PORT) || 5000;
+    port = Number(process.env.PORT) || 5000;
     setupCustomServer(app, port);
 
     url = await ngrok.connect(port);
