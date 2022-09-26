@@ -2,6 +2,7 @@ const { bottender } = require('bottender');
 const ngrok = require('ngrok');
 const shell = require('shelljs');
 const { setupCustomServer } = require('./src/custom-server');
+const { logger } = require('./src/logger');
 const { setupScheduler } = require('./src/scheduler');
 
 const app = bottender({
@@ -11,26 +12,36 @@ const app = bottender({
 const setWebhookUrl = (url) =>
   shell.exec(`npm run telegram-webhook:set ${url}/webhooks/telegram`);
 
+const connectToTunnel = async (port) => {
+  const url = await ngrok.connect({
+    addr: port,
+    onStatusChange: (status) => {
+      switch (status) {
+        case 'connected': {
+          logger.info('Connected to nginx...');
+          break;
+        }
+        case 'closed': {
+          logger.warn('Connection to nginx is closed...');
+          logger.info('Reconnecting...');
+          return connectToTunnel(port);
+        }
+      }
+    },
+  });
+  setWebhookUrl(url);
+};
+
 (async () => {
-  let url;
-  let port;
   try {
     await app.prepare();
-    port = Number(process.env.PORT) || 5000;
+    const port = Number(process.env.PORT) || 5000;
     setupCustomServer(app, port);
 
-    url = await ngrok.connect(port);
-    setWebhookUrl(url);
+    await connectToTunnel(port);
 
     setupScheduler();
   } catch (error) {
-    console.error(error);
-    if (
-      error?.body?.error_code === 103 &&
-      error?.body?.msg === 'failed to start tunnel'
-    ) {
-      url = await ngrok.connect(port);
-      setWebhookUrl(url);
-    }
+    logger.error(error, 'Setting up failed...');
   }
 })();
