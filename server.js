@@ -18,11 +18,11 @@ const connectToTunnel = async (port) => {
     onStatusChange: (status) => {
       switch (status) {
         case 'connected': {
-          logger.info('Connected to nginx...');
+          logger.info('Connected to tunnel...');
           break;
         }
         case 'closed': {
-          logger.warn('Connection to nginx is closed...');
+          logger.warn('Connection to tunnel is closed...');
           logger.info('Reconnecting...');
           return connectToTunnel(port);
         }
