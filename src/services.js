@@ -252,9 +252,13 @@ const handleMessage = async (time) => {
       return getMessageForEmptyList(minutes, date);
     }
 
-    logger.info('Adding minting info...');
-    await addMintingInfo(filteredCollections);
-    logger.info('Added minting info...');
+    try {
+      logger.info('Adding minting info...');
+      await addMintingInfo(filteredCollections);
+      logger.info('Added minting info...');
+    } catch (error) {
+      logger.error(error, 'Adding minting info failed...');
+    }
 
     return getResponse(filteredCollections, minutes, date);
   } catch (error) {
