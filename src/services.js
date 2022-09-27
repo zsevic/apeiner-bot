@@ -212,10 +212,13 @@ const getFilteredCollections = (collections) =>
 const getTimezoneDate = (date) =>
   date.toLocaleTimeString('en-US', { timeZone: TIMEZONE });
 
-const getMessageForEmptyList = (minutes, date) =>
-  `There are no bought NFTs in last ${minutes} minute${
+const getMessageForEmptyList = (minutes, date) => {
+  const message = `There are no bought NFTs in last ${minutes} minute${
     minutes > 1 ? 's' : ''
   } (after ${getTimezoneDate(date)})`;
+  logger.info(message);
+  return message;
+};
 
 const getResponse = (collections, minutes, date) => {
   const formattedResponse = formatResponse(collections);
