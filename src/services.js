@@ -98,9 +98,9 @@ const formatResponse = (filteredCollections) =>
         result[1].createdDate
       }\n${
         result[1].twitterUsername
-          ? `<a href="https://twitter.com/${result[1].twitterUsername}">twitter</a>`
+          ? `<a href="https://twitter.com/${result[1].twitterUsername}">twitter</a>\n`
           : ''
-      }\n<a href="https://coniun.io/collection/${
+      }<a href="https://coniun.io/collection/${
         result[1].slug
       }/dashboard">dashboard</a>\n`;
     })

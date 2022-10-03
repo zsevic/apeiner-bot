@@ -47,11 +47,10 @@ describe('formatResponse', () => {
           slug: 'nft2',
           totalSupply: 5000,
           totalVolume: 34,
-          twitterUsername: 'nft2',
         },
       ],
     ];
-    const expectedResult = `<a href="https://opensea.io/collection/nft">nft</a>: 4 sales (2 accepted bids)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.2 - 0.9eth\nfloor: 0.5eth\none day volume: 22eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n<a href="https://twitter.com/nft">twitter</a>\n<a href="https://coniun.io/collection/nft/dashboard">dashboard</a>\n\n<a href="https://opensea.io/collection/nft2">nft2</a>: 1 sale (1 accepted bid)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.5eth\nfloor: 0.5eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\none day sales: 200\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n<a href="https://twitter.com/nft2">twitter</a>\n<a href="https://coniun.io/collection/nft2/dashboard">dashboard</a>\n`;
+    const expectedResult = `<a href="https://opensea.io/collection/nft">nft</a>: 4 sales (2 accepted bids)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.2 - 0.9eth\nfloor: 0.5eth\none day volume: 22eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n<a href="https://twitter.com/nft">twitter</a>\n<a href="https://coniun.io/collection/nft/dashboard">dashboard</a>\n\n<a href="https://opensea.io/collection/nft2">nft2</a>: 1 sale (1 accepted bid)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.5eth\nfloor: 0.5eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\none day sales: 200\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n<a href="https://coniun.io/collection/nft2/dashboard">dashboard</a>\n`;
 
     const result = formatResponse(collections);
 
