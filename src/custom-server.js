@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
+const { logger } = require('./logger');
 
 const setupCustomServer = (app, port) => {
   // the request handler of the bottender app
@@ -20,7 +21,7 @@ const setupCustomServer = (app, port) => {
 
   server.listen(port, (err) => {
     if (err) throw err;
-    console.log(`> Ready on http://localhost:${port}`);
+    logger.info(`Ready on http://localhost:${port}`);
   });
 };
 
