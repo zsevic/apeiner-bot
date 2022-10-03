@@ -17,8 +17,6 @@ cp .env.sample .env # change values after copying
 nvm use 17
 npm i
 npm run dev
-npx ngrok http 5000
-npm run telegram-webhook:set <URL>/webhooks/telegram
 ```
 
 ### Linting
