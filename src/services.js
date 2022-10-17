@@ -77,8 +77,20 @@ const formatResponse = (filteredCollections) =>
       }${
         result[1].isUnrevealed ? 'UNREVEALED\n' : ''
       }sold for ${price}\nfloor: ${result[1].floorPrice}eth\n${
-        result[1].oneDayVolume
-          ? 'one day volume: ' + result[1].oneDayVolume + 'eth\n'
+        result[1].averagePrice
+          ? 'one hour average price: ' + result[1].oneHourAveragePrice + 'eth\n'
+          : ''
+      }${
+        result[1].averagePrice
+          ? 'average price: ' + result[1].averagePrice + 'eth\n'
+          : ''
+      }${
+        result[1].oneHourSales
+          ? 'one hour sales: ' + result[1].oneHourSales + '\n'
+          : ''
+      }${
+        result[1].totalSales
+          ? 'total sales: ' + result[1].totalSales + '\n'
           : ''
       }total volume: ${result[1].totalVolume}eth\n${
         result[1].numberOfListed
@@ -87,10 +99,6 @@ const formatResponse = (filteredCollections) =>
             '/' +
             result[1].totalSupply +
             '\n'
-          : ''
-      }${
-        result[1].oneDaySales
-          ? 'one day sales: ' + result[1].oneDaySales + '\n'
           : ''
       }owners/supply: ${result[1].numberOfOwners}/${
         result[1].totalSupply
@@ -137,6 +145,24 @@ const addCollectionsInfo = async (collections) =>
         Number.parseFloat(stats.totalVolume.unit).toFixed(1) * 1;
       collectionItem[1].twitterUsername =
         collectionData.connectedTwitterUsername;
+    })
+  );
+
+const addCollectionsStats = async (collections) =>
+  Promise.all(
+    collections.map(async (collectionItem) => {
+      const collectionSlug = collectionItem[1].slug;
+      const collectionStats = await axios(
+        `https://api.opensea.io/api/v1/collection/${collectionSlug}`
+      ).then((res) => res.data.collection.stats);
+      collectionItem[1].averagePrice =
+        Number.parseFloat(collectionStats.average_price).toFixed(3) * 1;
+      collectionItem[1].oneHourAveragePrice =
+        collectionStats.one_hour_average_price &&
+        Number.parseFloat(collectionStats.one_hour_average_price).toFixed(3) *
+          1;
+      collectionItem[1].oneHourSales = collectionStats.one_hour_sales;
+      collectionItem[1].totalSales = collectionStats.total_sales;
     })
   );
 
@@ -260,6 +286,14 @@ const handleMessage = async (time) => {
       logger.info('Added minting info...');
     } catch (error) {
       logger.error(error, 'Adding minting info failed...');
+    }
+
+    try {
+      logger.info('Adding collections stats...');
+      await addCollectionsStats(filteredCollections);
+      logger.info('Added collections stats...');
+    } catch (error) {
+      logger.error(error, 'Adding collections stats failed...');
     }
 
     return getResponse(filteredCollections, minutes, date);
