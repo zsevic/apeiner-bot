@@ -35,7 +35,7 @@ const connectToTunnel = async (port) => {
 (async () => {
   try {
     await app.prepare();
-    const port = Number(process.env.PORT) || 5000;
+    const port = Number(process.env.PORT) || 8080;
     setupCustomServer(app, port);
 
     if (process.env.NODE_ENV !== 'production') {
