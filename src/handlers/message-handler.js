@@ -25,6 +25,9 @@ async function HandleMessage(context) {
   await context.sendMessage(statusMessage);
   const response = await handleMessage(time);
 
+  logger.info(`Sending stats for last ${minutes} minute${
+    minutes !== 1 ? 's' : ''
+  }...`);
   await context.sendMessage(response, {
     parseMode: 'HTML',
     replyMarkup,
