@@ -270,30 +270,32 @@ const handleMessage = async (time) => {
     const collections = await getCollections(date);
 
     const sortedCollections = getSortedCollections(collections);
-    if (sortedCollections.length === 0) {
+    const sortedCollectionsLength = sortedCollections.length;
+    if (sortedCollectionsLength === 0) {
       return getMessageForEmptyList(minutes, date);
     }
-    logger.info('Adding collections info...');
+    logger.info(`Adding collections info for ${sortedCollectionsLength} collections...`);
     await addCollectionsInfo(sortedCollections);
-    logger.info('Added collections info...');
+    logger.info(`Added collections info for ${sortedCollectionsLength} collections...`);
 
     const filteredCollections = getFilteredCollections(sortedCollections);
-    if (filteredCollections.length === 0) {
+    const filteredCollectionsLength = filteredCollections.length;
+    if (filteredCollectionsLength === 0) {
       return getMessageForEmptyList(minutes, date);
     }
 
     try {
-      logger.info('Adding minting info...');
+      logger.info(`Adding minting info for ${filteredCollectionsLength} collections...`);
       await addMintingInfo(filteredCollections);
-      logger.info('Added minting info...');
+      logger.info(`Added minting info for ${filteredCollectionsLength} collections...`);
     } catch (error) {
       logger.error(error, 'Adding minting info failed...');
     }
 
     try {
-      logger.info('Adding collections stats...');
+      logger.info(`Adding collections stats for ${filteredCollectionsLength} collections...`);
       await addCollectionsStats(filteredCollections);
-      logger.info('Added collections stats...');
+      logger.info(`Added collections stats for ${filteredCollectionsLength} collections...`);
     } catch (error) {
       logger.error(error, 'Adding collections stats failed...');
     }
