@@ -128,8 +128,8 @@ const addCollectionsInfo = async (collections) =>
             'fa8e5c54d32ed81dfe15e0942c3cc0404a7d856e2c99377fea41965b6a437379',
         },
       })
-        .then(res => res.json())
-        .then(res => res.data.collection)
+        .then((res) => res.json())
+        .then((res) => res.data.collection);
       const stats = collectionData.statsV2;
       collectionItem[1].contractAddress =
         collectionData.assetContracts?.edges?.[0]?.node?.address;
