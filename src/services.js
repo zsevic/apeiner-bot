@@ -1,12 +1,9 @@
-const axios = require('axios');
 const {
-  headers,
   COLLECTIONS_TO_ANALYZE,
   MAX_TOTAL_SUPPLY,
   MIN_FLOOR_PRICE,
   MIN_TOTAL_SUPPLY,
   MIN_VOLUME,
-  OPENSEA_API_BASE_URL,
   TIMEZONE,
   NULL_ADDRESS,
   WETH,
@@ -241,9 +238,13 @@ const handleMessage = async (time) => {
     if (sortedCollectionsLength === 0) {
       return getMessageForEmptyList(minutes, date);
     }
-    logger.info(`Adding collections info for ${sortedCollectionsLength} collections...`);
+    logger.info(
+      `Adding collections info for ${sortedCollectionsLength} collections...`
+    );
     await addCollectionsInfo(sortedCollections);
-    logger.info(`Added collections info for ${sortedCollectionsLength} collections...`);
+    logger.info(
+      `Added collections info for ${sortedCollectionsLength} collections...`
+    );
 
     const filteredCollections = getFilteredCollections(sortedCollections);
     const filteredCollectionsLength = filteredCollections.length;
@@ -252,24 +253,32 @@ const handleMessage = async (time) => {
     }
 
     try {
-      logger.info(`Adding minting info for ${filteredCollectionsLength} collections...`);
+      logger.info(
+        `Adding minting info for ${filteredCollectionsLength} collections...`
+      );
       await addMintingInfo(filteredCollections);
-      logger.info(`Added minting info for ${filteredCollectionsLength} collections...`);
+      logger.info(
+        `Added minting info for ${filteredCollectionsLength} collections...`
+      );
     } catch (error) {
       logger.error(error, 'Adding minting info failed...');
     }
 
     try {
-      logger.info(`Adding collections stats for ${filteredCollectionsLength} collections...`);
+      logger.info(
+        `Adding collections stats for ${filteredCollectionsLength} collections...`
+      );
       await addCollectionsStats(filteredCollections);
-      logger.info(`Added collections stats for ${filteredCollectionsLength} collections...`);
+      logger.info(
+        `Added collections stats for ${filteredCollectionsLength} collections...`
+      );
     } catch (error) {
       logger.error(error, 'Adding collections stats failed...');
     }
 
-    logger.info(`Sending stats for last ${minutes} minute${
-      minutes !== 1 ? 's' : ''
-    }...`);
+    logger.info(
+      `Sending stats for last ${minutes} minute${minutes !== 1 ? 's' : ''}...`
+    );
     return getResponse(filteredCollections, minutes, date);
   } catch (error) {
     logger.error(error, error.message);
