@@ -1,4 +1,3 @@
-const axios = require('axios');
 const {
   COLLECTION_RETRIEVAL_COUNTER,
   headers,
@@ -36,9 +35,9 @@ const getCollectionInfo = async (collectionSlug) => {
 };
 
 const getCollectionStats = async (collectionSlug) => {
-  return axios(
-    `https://api.opensea.io/api/v1/collection/${collectionSlug}`
-  ).then((res) => res.data.collection.stats);
+  return fetch(`https://api.opensea.io/api/v1/collection/${collectionSlug}`)
+    .then((res) => res.json())
+    .then((res) => res.collection.stats);
 };
 
 const getEvents = async (cursor) => {
