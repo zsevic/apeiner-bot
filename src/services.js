@@ -60,7 +60,7 @@ const formatResponse = (filteredCollections) =>
     .map((result) => {
       const uniqueBuyers = [...new Set(result[1].buyers)].length;
       const price = getPricesRange(result[1].prices);
-      return `<a href="https://opensea.io/collection/${result[1].slug}">${
+      return `<a href="https://gem.xyz/collection/${result[1].slug}">${
         result[0]
       }</a>: ${result[1].numberOfSales} sale${
         result[1].numberOfSales > 1 ? 's' : ''
