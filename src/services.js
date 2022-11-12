@@ -134,9 +134,7 @@ const addCollectionsStats = async (collections) =>
   Promise.all(
     collections.map(async (collectionItem) => {
       const collectionSlug = collectionItem[1].slug;
-      const collectionStats = await axios(
-        `https://api.opensea.io/api/v1/collection/${collectionSlug}`
-      ).then((res) => res.data.collection.stats);
+      const collectionStats = await nftApi.getCollectionStats(collectionSlug);
       collectionItem[1].averagePrice =
         Number.parseFloat(collectionStats.average_price).toFixed(3) * 1;
       collectionItem[1].oneHourAveragePrice =
