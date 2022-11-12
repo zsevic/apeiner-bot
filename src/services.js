@@ -191,7 +191,7 @@ const getCollections = async (date) => {
     }
     requestNumber += 1;
     logger.info(`Got ${newItems} events, finished ${requestNumber}. request`);
-  } while (cursor && newItems !== 0 && requestNumber <= 10);
+  } while (cursor && newItems !== 0);
 
   return results;
 };
