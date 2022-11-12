@@ -38,7 +38,9 @@ const connectToTunnel = async (port) => {
     const port = Number(process.env.PORT) || 5000;
     setupCustomServer(app, port);
 
-    await connectToTunnel(port);
+    if (process.env.NODE_ENV !== 'production') {
+      await connectToTunnel(port);
+    }
 
     setupScheduler();
   } catch (error) {
