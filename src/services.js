@@ -114,7 +114,7 @@ const addCollectionsInfo = async (collections) =>
       collectionItem[1].floorPrice =
         stats.floorPrice?.unit &&
         Number.parseFloat(stats.floorPrice.unit).toFixed(3) * 1;
-      collectionItem[1].isUnrevealed = collectionData.stringTraits.length <= 1;
+      collectionItem[1].isUnrevealed = collectionData.stringTraits.length < 1;
       collectionItem[1].numberOfOwners = stats.numOwners;
       collectionItem[1].royalty =
         Number(collectionData.totalCreatorFeeBasisPoints) / 100;
