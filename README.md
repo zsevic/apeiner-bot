@@ -6,7 +6,7 @@
 
 ### Prerequisites
 
-- Node version 17
+- Node version 18
 
 ### Setup
 
@@ -14,7 +14,7 @@
 git clone git@github.com:zsevic/apeiner-bot.git
 cd apeiner-bot
 cp .env.sample .env # change values after copying
-nvm use 17
+nvm use 18
 npm i
 npm run dev
 ```
