@@ -59,9 +59,15 @@ const formatResponse = (filteredCollections) =>
             (result[1].acceptedBids > 1 ? 's' : '') +
             ')'
           : ''
-      }\nunique buyers: ${result[1].uniqueBuyers}\nunique sellers: ${
-        result[1].uniqueSellers
-      }\n${result[1].isMinting ? 'MINTING\n' : ''}${
+      }\n${
+        result[1].numberOfSales > 1
+          ? 'unique buyers: ' + result[1].uniqueBuyers + '\n'
+          : ''
+      }${
+        result[1].numberOfSales > 1
+          ? 'unique sellers: ' + result[1].uniqueSellers + '\n'
+          : ''
+      }${result[1].isMinting ? 'MINTING\n' : ''}${
         result[1].isUnrevealed ? 'UNREVEALED\n' : ''
       }sold for ${price}\nfloor: ${result[1].floorPrice}eth\n${
         result[1].averagePrice
