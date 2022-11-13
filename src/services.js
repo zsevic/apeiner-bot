@@ -61,8 +61,12 @@ const formatResponse = (filteredCollections) =>
           : ''
       }\n${
         result[1].numberOfSales > 1
-          ? 'unique buyers: ' + result[1].uniqueBuyers + '\n'
-            + 'unique sellers: ' + result[1].uniqueSellers + '\n'
+          ? 'unique buyers: ' +
+            result[1].uniqueBuyers +
+            '\n' +
+            'unique sellers: ' +
+            result[1].uniqueSellers +
+            '\n'
           : ''
       }${result[1].isMinting ? 'MINTING\n' : ''}${
         result[1].isUnrevealed ? 'UNREVEALED\n' : ''
