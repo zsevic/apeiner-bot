@@ -46,7 +46,6 @@ const getPricesRange = (prices) => {
 const formatResponse = (filteredCollections) =>
   filteredCollections
     .map((result) => {
-      const uniqueBuyers = [...new Set(result[1].buyers)].length;
       const price = getPricesRange(result[1].prices);
       return `<a href="https://gem.xyz/collection/${result[1].slug}">${
         result[0]
@@ -60,9 +59,9 @@ const formatResponse = (filteredCollections) =>
             (result[1].acceptedBids > 1 ? 's' : '') +
             ')'
           : ''
-      }\nunique buyers: ${uniqueBuyers}\n${
-        result[1].isMinting ? 'MINTING\n' : ''
-      }${
+      }\nunique buyers: ${result[1].uniqueBuyers}\nunique sellers: ${
+        result[1].uniqueSellers
+      }\n${result[1].isMinting ? 'MINTING\n' : ''}${
         result[1].isUnrevealed ? 'UNREVEALED\n' : ''
       }sold for ${price}\nfloor: ${result[1].floorPrice}eth\n${
         result[1].averagePrice
@@ -124,6 +123,14 @@ const addCollectionsInfo = async (collections) =>
         Number.parseFloat(stats.totalVolume.unit).toFixed(1) * 1;
       collectionItem[1].twitterUsername =
         collectionData.connectedTwitterUsername;
+      collectionItem[1].uniqueBuyers = [
+        ...new Set(collectionItem[1].buyers),
+      ].length;
+      collectionItem[1].uniqueSellers = [
+        ...new Set(collectionItem[1].sellers),
+      ].length;
+      collectionItem[1].buyers = undefined;
+      collectionItem[1].sellers = undefined;
     })
   );
 
@@ -169,9 +176,11 @@ const getCollections = async (date) => {
       const isAcceptedBid = node?.payment?.symbol === WETH;
       const acceptedBids = isAcceptedBid ? 1 : 0;
       const buyer = node.winnerAccount.address;
+      const seller = node.seller.address;
       const price = node.perUnitPrice.eth;
       if (results[collectionName]) {
         results[collectionName].buyers.push(buyer);
+        results[collectionName].sellers.push(seller);
         results[collectionName].numberOfSales += 1;
         results[collectionName].acceptedBids += acceptedBids;
         results[collectionName].prices.push(price);
@@ -181,6 +190,7 @@ const getCollections = async (date) => {
         slug: node?.collection?.slug,
         acceptedBids,
         buyers: [buyer],
+        sellers: [seller],
         prices: [price],
         tokenId,
         numberOfSales: 1,

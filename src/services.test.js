@@ -13,7 +13,8 @@ describe('formatResponse', () => {
         {
           acceptedBids: 2,
           averagePrice: 0.8,
-          buyers: ['0x1234', '0x1234', '0x1235', '0x1236'],
+          uniqueBuyers: 3,
+          uniqueSellers: 3,
           createdDate: createDate('2020-12-12'),
           floorPrice: 0.5,
           isMinting: true,
@@ -36,7 +37,8 @@ describe('formatResponse', () => {
         'nft2',
         {
           acceptedBids: 1,
-          buyers: ['0x1234', '0x1234', '0x1235', '0x1236'],
+          uniqueBuyers: 3,
+          uniqueSellers: 2,
           createdDate: createDate('2020-12-12'),
           floorPrice: 0.5,
           isMinting: true,
@@ -53,7 +55,7 @@ describe('formatResponse', () => {
         },
       ],
     ];
-    const expectedResult = `<a href="https://gem.xyz/collection/nft">nft</a>: 4 sales (2 accepted bids)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.2 - 0.9eth\nfloor: 0.5eth\none hour average price: 0.6eth\naverage price: 0.8eth\none hour sales: 4\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n<a href="https://twitter.com/nft">twitter</a>\n<a href="https://coniun.io/collection/nft/dashboard">dashboard</a>\n\n<a href="https://gem.xyz/collection/nft2">nft2</a>: 1 sale (1 accepted bid)\nunique buyers: 3\nMINTING\nUNREVEALED\nsold for 0.5eth\nfloor: 0.5eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n<a href="https://coniun.io/collection/nft2/dashboard">dashboard</a>\n`;
+    const expectedResult = `<a href="https://gem.xyz/collection/nft">nft</a>: 4 sales (2 accepted bids)\nunique buyers: 3\nunique sellers: 3\nMINTING\nUNREVEALED\nsold for 0.2 - 0.9eth\nfloor: 0.5eth\none hour average price: 0.6eth\naverage price: 0.8eth\none hour sales: 4\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n<a href="https://twitter.com/nft">twitter</a>\n<a href="https://coniun.io/collection/nft/dashboard">dashboard</a>\n\n<a href="https://gem.xyz/collection/nft2">nft2</a>: 1 sale (1 accepted bid)\nunique buyers: 3\nunique sellers: 2\nMINTING\nUNREVEALED\nsold for 0.5eth\nfloor: 0.5eth\ntotal volume: 34eth\nlisted/supply: 2000/5000\nowners/supply: 3000/5000\nroyalty: 2.5%\ncreation date: 12 December 2020\n<a href="https://coniun.io/collection/nft2/dashboard">dashboard</a>\n`;
 
     const result = formatResponse(collections);
 
