@@ -7,6 +7,7 @@
   },
   "scripts": {
     "dev": "nodemon server.js",
+    "generate-docs": "jsdoc src -d docs",
     "lint": "eslint . ",
     "lint:fix": "npm run lint -- --fix",
     "start": "node server.js",
@@ -27,5 +28,8 @@
     "pino": "^8.1.0",
     "prettier": "2.7.1",
     "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "jsdoc": "^4.0.0"
   }
 }

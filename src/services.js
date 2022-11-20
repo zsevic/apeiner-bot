@@ -12,7 +12,7 @@ const { logger } = require('./logger');
 const nftApi = require('./nft-api');
 const { getDate, createDate } = require('./utils');
 /**
- *
+ * @private
  * @param {Array.<CollectionItem>} collections
  * @returns {Promise<void>}
  */
@@ -36,7 +36,7 @@ const addMintingInfo = async (collections) =>
     })
   );
 /**
- *
+ * @private
  * @param {Array.<number>} prices
  * @returns {string}
  */
@@ -143,7 +143,7 @@ const formatResponse = (filteredCollections) =>
     })
     .join('\n');
 /**
- *
+ * @private
  * @param {Array.<CollectionItem>} collections
  * @returns {Promise<void>}
  */
@@ -177,7 +177,7 @@ const addCollectionsInfo = async (collections) =>
     })
   );
 /**
- *
+ * @private
  * @param {Array.<CollectionItem>} collections
  * @returns {Promise<void>}
  */
@@ -197,7 +197,7 @@ const addCollectionsStats = async (collections) =>
     })
   );
 /**
- *
+ * @private
  * @param {Date} date
  * @returns {Promise<Object<string, CollectionItem>>}
  */
@@ -268,14 +268,14 @@ const getFilteredCollections = (collections) =>
       value.numberOfOwners <= value.totalSupply
   );
 /**
- *
+ * @private
  * @param {Date} date
  * @returns {string}
  */
 const getTimezoneDate = (date) =>
   date.toLocaleTimeString('en-US', { timeZone: TIMEZONE });
 /**
- *
+ * @private
  * @param {number} minutes
  * @param {Date} date
  * @returns {string}
@@ -288,7 +288,7 @@ const getMessageForEmptyList = (minutes, date) => {
   return message;
 };
 /**
- *
+ * @private
  * @param {Array.<CollectionItem>} collections
  * @param {number} minutes
  * @param {Date} date
@@ -319,7 +319,7 @@ const getSortedCollections = (collections) =>
  *
  * @param {number} seconds
  * @param {number} minutes
- * @returns {string}
+ * @returns {Promise<string>}
  */
 const handleMessage = async (seconds, minutes) => {
   try {
@@ -380,12 +380,8 @@ const handleMessage = async (seconds, minutes) => {
 };
 
 module.exports = {
-  addCollectionsInfo,
   formatResponse,
-  getCollections,
   getFilteredCollections,
-  getMessageForEmptyList,
-  getResponse,
   getSortedCollections,
   handleMessage,
 };
