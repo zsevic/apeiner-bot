@@ -18,7 +18,7 @@ const setupScheduler = () =>
       }...`;
       logger.info(statusMessage);
       await client.sendMessage(CHAT_ID, statusMessage);
-      const response = await handleMessage(time);
+      const response = await handleMessage(...time);
 
       await client.sendMessage(CHAT_ID, response, {
         parseMode: 'HTML',

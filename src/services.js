@@ -11,7 +11,11 @@ const {
 const { logger } = require('./logger');
 const nftApi = require('./nft-api');
 const { getDate, createDate } = require('./utils');
-
+/**
+ *
+ * @param {Array.<CollectionItem>} collections
+ * @returns {Promise<void>}
+ */
 const addMintingInfo = async (collections) =>
   Promise.all(
     collections.map(async (collectionItem) => {
@@ -27,11 +31,15 @@ const addMintingInfo = async (collections) =>
       const timeDifference = date.getTime() - timestamp.getTime();
       const timeFactor = 5 * 60 * 60 * 1000;
       if (address === NULL_ADDRESS && timeDifference < timeFactor) {
-        collectionItem[1].isMinting = true;
+        collectionItem.isMinting = true;
       }
     })
   );
-
+/**
+ *
+ * @param {Array.<number>} prices
+ * @returns {string}
+ */
 const getPricesRange = (prices) => {
   const minPrice = Number.parseFloat(Math.min(...prices)).toFixed(3) * 1;
   const maxPrice = Number.parseFloat(Math.max(...prices)).toFixed(3) * 1;
@@ -43,120 +51,156 @@ const getPricesRange = (prices) => {
   return `${minPrice} - ${maxPrice}eth`;
 };
 
+/**
+ * @typedef {object} CollectionItem
+ * @property {string} [collectionName]
+ * @property {Array.<number>} prices
+ * @property {string} slug
+ * @property {number} numberOfSales
+ * @property {number} acceptedBids
+ * @property {number} [uniqueBuyers]
+ * @property {Array.<string>} [buyers]
+ * @property {number} [uniqueSellers]
+ * @property {Array.<string>} [sellers]
+ * @property {boolean} [isMinting]
+ * @property {boolean} isRevealed
+ * @property {number} floorPrice
+ * @property {number} averagePrice
+ * @property {number} oneHourAveragePrice
+ * @property {number} oneHourSales
+ * @property {number} totalSales
+ * @property {number} totalVolume
+ * @property {number} numberOfListed
+ * @property {number} totalSupply
+ * @property {number} numberOfOwners
+ * @property {number} royalty
+ * @property {string} [twitterUsername]
+ */
+
+/**
+ *
+ * @param {Array.<CollectionItem>} filteredCollections
+ * @returns {string}
+ */
 const formatResponse = (filteredCollections) =>
   filteredCollections
     .map((result) => {
-      const price = getPricesRange(result[1].prices);
-      return `<a href="https://gem.xyz/collection/${result[1].slug}">${
-        result[0]
-      }</a>: ${result[1].numberOfSales} sale${
-        result[1].numberOfSales > 1 ? 's' : ''
+      const price = getPricesRange(result.prices);
+      return `<a href="https://gem.xyz/collection/${result.slug}">${
+        result.collectionName
+      }</a>: ${result.numberOfSales} sale${
+        result.numberOfSales > 1 ? 's' : ''
       }${
-        result[1].acceptedBids > 0
+        result.acceptedBids > 0
           ? ' (' +
-            result[1].acceptedBids +
+            result.acceptedBids +
             ' accepted bid' +
-            (result[1].acceptedBids > 1 ? 's' : '') +
+            (result.acceptedBids > 1 ? 's' : '') +
             ')'
           : ''
       }\n${
-        result[1].numberOfSales > 1
+        result.numberOfSales > 1
           ? 'unique buyers: ' +
-            result[1].uniqueBuyers +
+            result.uniqueBuyers +
             '\n' +
             'unique sellers: ' +
-            result[1].uniqueSellers +
+            result.uniqueSellers +
             '\n'
           : ''
-      }${result[1].isMinting ? 'MINTING\n' : ''}${
-        result[1].isUnrevealed ? 'UNREVEALED\n' : ''
-      }sold for ${price}\nfloor: ${result[1].floorPrice}eth\n${
-        result[1].averagePrice
-          ? 'one hour average price: ' + result[1].oneHourAveragePrice + 'eth\n'
+      }${result.isMinting ? 'MINTING\n' : ''}${
+        result.isUnrevealed ? 'UNREVEALED\n' : ''
+      }sold for ${price}\nfloor: ${result.floorPrice}eth\n${
+        result.averagePrice
+          ? 'one hour average price: ' + result.oneHourAveragePrice + 'eth\n'
           : ''
       }${
-        result[1].averagePrice
-          ? 'average price: ' + result[1].averagePrice + 'eth\n'
+        result.averagePrice
+          ? 'average price: ' + result.averagePrice + 'eth\n'
           : ''
       }${
-        result[1].oneHourSales
-          ? 'one hour sales: ' + result[1].oneHourSales + '\n'
+        result.oneHourSales
+          ? 'one hour sales: ' + result.oneHourSales + '\n'
           : ''
       }${
-        result[1].totalSales
-          ? 'total sales: ' + result[1].totalSales + '\n'
-          : ''
-      }total volume: ${result[1].totalVolume}eth\n${
-        result[1].numberOfListed
+        result.totalSales ? 'total sales: ' + result.totalSales + '\n' : ''
+      }total volume: ${result.totalVolume}eth\n${
+        result.numberOfListed
           ? 'listed/supply: ' +
-            result[1].numberOfListed +
+            result.numberOfListed +
             '/' +
-            result[1].totalSupply +
+            result.totalSupply +
             '\n'
           : ''
-      }owners/supply: ${result[1].numberOfOwners}/${
-        result[1].totalSupply
-      }\nroyalty: ${result[1].royalty}%\ncreation date: ${
-        result[1].createdDate
-      }\n${
-        result[1].twitterUsername
-          ? `<a href="https://twitter.com/${result[1].twitterUsername}">twitter</a>\n`
+      }owners/supply: ${result.numberOfOwners}/${
+        result.totalSupply
+      }\nroyalty: ${result.royalty}%\ncreation date: ${result.createdDate}\n${
+        result.twitterUsername
+          ? `<a href="https://twitter.com/${result.twitterUsername}">twitter</a>\n`
           : ''
       }<a href="https://coniun.io/collection/${
-        result[1].slug
+        result.slug
       }/dashboard">dashboard</a>\n`;
     })
     .join('\n');
-
+/**
+ *
+ * @param {Array.<CollectionItem>} collections
+ * @returns {Promise<void>}
+ */
 const addCollectionsInfo = async (collections) =>
   Promise.all(
     collections.map(async (collectionItem) => {
-      const collectionSlug = collectionItem[1].slug;
+      const collectionSlug = collectionItem.slug;
       const collectionData = await nftApi.getCollectionInfo(collectionSlug);
       const stats = collectionData.statsV2;
-      collectionItem[1].contractAddress =
+      collectionItem.contractAddress =
         collectionData.assetContracts?.edges?.[0]?.node?.address;
-      collectionItem[1].createdDate = createDate(collectionData.createdDate);
-      collectionItem[1].floorPrice =
+      collectionItem.createdDate = createDate(collectionData.createdDate);
+      collectionItem.floorPrice =
         stats.floorPrice?.unit &&
         Number.parseFloat(stats.floorPrice.unit).toFixed(3) * 1;
-      collectionItem[1].isUnrevealed = collectionData.stringTraits.length < 1;
-      collectionItem[1].numberOfOwners = stats.numOwners;
-      collectionItem[1].royalty =
+      collectionItem.isUnrevealed = collectionData.stringTraits.length < 1;
+      collectionItem.numberOfOwners = stats.numOwners;
+      collectionItem.royalty =
         Number(collectionData.totalCreatorFeeBasisPoints) / 100;
-      collectionItem[1].numberOfListed = stats.totalListed;
-      collectionItem[1].totalSupply = stats.totalSupply;
-      collectionItem[1].totalVolume =
+      collectionItem.numberOfListed = stats.totalListed;
+      collectionItem.totalSupply = stats.totalSupply;
+      collectionItem.totalVolume =
         Number.parseFloat(stats.totalVolume.unit).toFixed(1) * 1;
-      collectionItem[1].twitterUsername =
-        collectionData.connectedTwitterUsername;
-      collectionItem[1].uniqueBuyers = [
-        ...new Set(collectionItem[1].buyers),
+      collectionItem.twitterUsername = collectionData.connectedTwitterUsername;
+      collectionItem.uniqueBuyers = [...new Set(collectionItem.buyers)].length;
+      collectionItem.uniqueSellers = [
+        ...new Set(collectionItem.sellers),
       ].length;
-      collectionItem[1].uniqueSellers = [
-        ...new Set(collectionItem[1].sellers),
-      ].length;
-      collectionItem[1].buyers = undefined;
-      collectionItem[1].sellers = undefined;
+      collectionItem.buyers = undefined;
+      collectionItem.sellers = undefined;
     })
   );
-
+/**
+ *
+ * @param {Array.<CollectionItem>} collections
+ * @returns {Promise<void>}
+ */
 const addCollectionsStats = async (collections) =>
   Promise.all(
     collections.map(async (collectionItem) => {
-      const collectionSlug = collectionItem[1].slug;
+      const collectionSlug = collectionItem.slug;
       const collectionStats = await nftApi.getCollectionStats(collectionSlug);
-      collectionItem[1].averagePrice =
+      collectionItem.averagePrice =
         Number.parseFloat(collectionStats.average_price).toFixed(3) * 1;
-      collectionItem[1].oneHourAveragePrice =
+      collectionItem.oneHourAveragePrice =
         collectionStats.one_hour_average_price &&
         Number.parseFloat(collectionStats.one_hour_average_price).toFixed(3) *
           1;
-      collectionItem[1].oneHourSales = collectionStats.one_hour_sales;
-      collectionItem[1].totalSales = collectionStats.total_sales;
+      collectionItem.oneHourSales = collectionStats.one_hour_sales;
+      collectionItem.totalSales = collectionStats.total_sales;
     })
   );
-
+/**
+ *
+ * @param {Date} date
+ * @returns {Promise<Object<string, CollectionItem>>}
+ */
 const getCollections = async (date) => {
   let cursor = null;
   let requestNumber = 0;
@@ -209,20 +253,33 @@ const getCollections = async (date) => {
 
   return results;
 };
-
+/**
+ *
+ * @param {Array.<CollectionItem>} collections
+ * @returns {Array.<CollectionItem>}
+ */
 const getFilteredCollections = (collections) =>
   collections.filter(
-    ([, value]) =>
+    (value) =>
       value.totalSupply <= MAX_TOTAL_SUPPLY &&
       value.totalSupply >= MIN_TOTAL_SUPPLY &&
       value.totalVolume > MIN_VOLUME &&
       value.floorPrice >= MIN_FLOOR_PRICE &&
       value.numberOfOwners <= value.totalSupply
   );
-
+/**
+ *
+ * @param {Date} date
+ * @returns {string}
+ */
 const getTimezoneDate = (date) =>
   date.toLocaleTimeString('en-US', { timeZone: TIMEZONE });
-
+/**
+ *
+ * @param {number} minutes
+ * @param {Date} date
+ * @returns {string}
+ */
 const getMessageForEmptyList = (minutes, date) => {
   const message = `There are no bought NFTs in last ${minutes} minute${
     minutes > 1 ? 's' : ''
@@ -230,23 +287,42 @@ const getMessageForEmptyList = (minutes, date) => {
   logger.info(message);
   return message;
 };
-
+/**
+ *
+ * @param {Array.<CollectionItem>} collections
+ * @param {number} minutes
+ * @param {Date} date
+ * @returns {string}
+ */
 const getResponse = (collections, minutes, date) => {
   const formattedResponse = formatResponse(collections);
   return `Bought NFTs in last ${minutes} minute${
     minutes > 1 ? 's' : ''
   } (after ${getTimezoneDate(date)})\n\n${formattedResponse}`;
 };
-
+/**
+ *
+ * @param {Object.<string, CollectionItem>} collections
+ * @returns {Array.<CollectionItem>}
+ */
 const getSortedCollections = (collections) =>
   Object.entries(collections)
-    .sort((a, b) => b[1].numberOfSales - a[1].numberOfSales)
+    .map(([key, value]) =>
+      Object.assign(value, {
+        collectionName: key,
+      })
+    )
+    .sort((a, b) => b.numberOfSales - a.numberOfSales)
     .slice(0, COLLECTIONS_TO_ANALYZE);
 
-const handleMessage = async (time) => {
+/**
+ *
+ * @param {number} seconds
+ * @param {number} minutes
+ * @returns {string}
+ */
+const handleMessage = async (seconds, minutes) => {
   try {
-    const [seconds, minutes] = time;
-
     const date = getDate(seconds);
     const collections = await getCollections(date);
 

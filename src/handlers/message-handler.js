@@ -23,7 +23,7 @@ async function HandleMessage(context) {
   }...`;
   logger.info(statusMessage);
   await context.sendMessage(statusMessage);
-  const response = await handleMessage(time);
+  const response = await handleMessage(...time);
 
   await context.sendMessage(response, {
     parseMode: 'HTML',
