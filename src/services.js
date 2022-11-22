@@ -110,7 +110,7 @@ const formatResponse = (filteredCollections) =>
       }${result.isMinting ? 'MINTING\n' : ''}${
         result.isUnrevealed ? 'UNREVEALED\n' : ''
       }sold for ${price}\nfloor: ${result.floorPrice}eth\n${
-        result.averagePrice
+        result.averagePrice && result.oneHourAveragePrice > 0
           ? 'one hour average price: ' + result.oneHourAveragePrice + 'eth\n'
           : ''
       }${
