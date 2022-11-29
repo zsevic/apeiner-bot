@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "nodemon server.js",
-    "generate-docs": "jsdoc src -d docs",
+    "generate-docs": "jsdoc src -r --destination docs --readme ./README.md --package ./package.json",
     "lint": "eslint . ",
     "lint:fix": "npm run lint -- --fix",
     "start": "node server.js",
