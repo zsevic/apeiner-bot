@@ -56,6 +56,7 @@ const getPricesRange = (prices) => {
  * @property {string} [collectionName]
  * @property {Array.<number>} prices
  * @property {string} slug
+ * @property {boolean} [isVerified]
  * @property {number} numberOfSales
  * @property {number} acceptedBids
  * @property {number} [uniqueBuyers]
@@ -86,7 +87,9 @@ const formatResponse = (filteredCollections) =>
   filteredCollections
     .map((result) => {
       const price = getPricesRange(result.prices);
-      return `<a href="https://gem.xyz/collection/${result.slug}">${
+      return `${
+        result.isVerified ? '&#x2713; ' : ''
+      }<a href="https://gem.xyz/collection/${result.slug}">${
         result.collectionName
       }</a>: ${result.numberOfSales} sale${
         result.numberOfSales > 1 ? 's' : ''
@@ -223,6 +226,8 @@ const getCollections = async (date) => {
       }
       const collectionName = node?.collection?.name;
       if (!collectionName) continue;
+      const isVerified =
+        node?.item?.collection?.verificationStatus === 'VERIFIED';
       const tokenId = Number(node?.item?.tokenId);
       const isAcceptedBid = node?.payment?.symbol === WETH;
       const acceptedBids = isAcceptedBid ? 1 : 0;
@@ -243,6 +248,7 @@ const getCollections = async (date) => {
         buyers: [buyer],
         sellers: [seller],
         prices: [price],
+        isVerified,
         tokenId,
         numberOfSales: 1,
       };
