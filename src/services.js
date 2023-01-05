@@ -213,6 +213,7 @@ const getCollections = async (date) => {
   do {
     logger.info(`Sending ${requestNumber + 1}. request...`);
     const response = await nftApi.getEvents(cursor);
+    if (!response) break;
     cursor = response.pageInfo.endCursor;
     newItems = response.edges.length || 0;
     for (const event of response.edges) {

@@ -71,7 +71,7 @@ const getEvents = async (cursor) => {
     },
   })
     .then((res) => res.json())
-    .then((res) => res.data.assetEvents);
+    .then((res) => res.data?.assetEvents);
 };
 
 module.exports = {
