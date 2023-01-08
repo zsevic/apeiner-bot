@@ -121,7 +121,7 @@ const formatResponse = (filteredCollections) =>
           ? 'average price: ' + result.averagePrice + 'eth\n'
           : ''
       }${
-        result.oneHourSales
+        result.oneHourSales > result.numberOfSales
           ? 'one hour sales: ' + result.oneHourSales + '\n'
           : ''
       }${
