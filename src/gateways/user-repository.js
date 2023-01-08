@@ -1,8 +1,8 @@
 const database = require('../config/database-config');
 
 /**
- * 
- * @param {number} id 
+ *
+ * @param {number} id
  */
 const getUserById = async (id) => {
   const users = await database('users').where('id', id);
@@ -10,7 +10,7 @@ const getUserById = async (id) => {
 };
 
 /**
- * 
+ *
  * @param {User} user
  */
 const saveUser = async (user) => database('users').insert(user);
