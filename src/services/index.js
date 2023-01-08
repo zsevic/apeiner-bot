@@ -9,7 +9,7 @@ const {
   WETH,
 } = require('../constants');
 const { logger } = require('../logger');
-const nftApi = require('../nft-api');
+const nftApi = require('../gateways/nft-api');
 const { getDate, createDate } = require('../utils');
 /**
  * @private

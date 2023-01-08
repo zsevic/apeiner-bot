@@ -4,11 +4,11 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable('users', function (table) {
-    table.integer('id');
+    table.integer('id').notNullable();
     table.string('username', 255).notNullable();
     table.boolean('is_subscribed').defaultTo(false);
     table.boolean('is_active').defaultTo(false);
-    table.timestamps();
+    table.timestamps(true, true);
   });
 };
 

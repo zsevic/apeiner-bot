@@ -4,8 +4,6 @@ const shell = require('shelljs');
 const { setupCustomServer } = require('./src/custom-server');
 const { logger } = require('./src/logger');
 const { setupScheduler } = require('./src/scheduler');
-const knexConfig = require('./knexfile');
-const knex = require('knex')(knexConfig[process.env.NODE_ENV]);
 
 const app = bottender({
   dev: process.env.NODE_ENV !== 'production',
