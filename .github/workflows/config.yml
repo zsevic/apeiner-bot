@@ -34,7 +34,7 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
 
       - name: Deploy to Fly.io
-        run: flyctl deploy --remote-only
+        run: flyctl deploy --remote-only --no-cache
 
       - name: Set Telegram webhook callback URL
         run: npm run telegram-webhook:set https://apeiner.fly.dev/webhooks/telegram
