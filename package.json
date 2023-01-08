@@ -19,6 +19,7 @@
     "body-parser": "^1.20.0",
     "bottender": "1.5.5",
     "cron": "^2.0.0",
+    "dotenv": "^16.0.3",
     "eslint": "8.18.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.1.0",
@@ -27,10 +28,10 @@
     "knex": "^2.4.0",
     "ngrok": "^4.3.3",
     "nodemon": "^2.0.19",
+    "pg": "^8.8.0",
     "pino": "^8.1.0",
     "prettier": "2.7.1",
-    "shelljs": "^0.8.5",
-    "sqlite3": "^5.1.4"
+    "shelljs": "^0.8.5"
   },
   "devDependencies": {
     "jsdoc": "^4.0.0"
