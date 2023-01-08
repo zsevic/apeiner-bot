@@ -7,10 +7,10 @@ const {
   TIMEZONE,
   NULL_ADDRESS,
   WETH,
-} = require('./constants');
-const { logger } = require('./logger');
-const nftApi = require('./nft-api');
-const { getDate, createDate } = require('./utils');
+} = require('../constants');
+const { logger } = require('../logger');
+const nftApi = require('../gateways/nft-api');
+const { getDate, createDate } = require('../utils');
 /**
  * @private
  * @param {Array.<CollectionItem>} collections

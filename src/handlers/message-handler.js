@@ -1,12 +1,13 @@
 const { replyMarkup, CHAT_ID } = require('../constants');
 const { logger } = require('../logger');
 const { handleMessage } = require('../services');
+const userService = require('../services/user-service');
 const { getTime } = require('../utils');
 
 async function HandleMessage(context) {
   const chatId = context.event._rawEvent.message?.chat?.id;
   if (chatId !== CHAT_ID) {
-    await context.sendMessage('Access denied!');
+    await userService.handleMessage(context);
     return;
   }
 

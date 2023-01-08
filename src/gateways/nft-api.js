@@ -2,7 +2,7 @@ const {
   COLLECTION_RETRIEVAL_COUNTER,
   headers,
   OPENSEA_API_BASE_URL,
-} = require('./constants');
+} = require('../constants');
 /**
  *
  * @param {CollectionItem} collectionItem
