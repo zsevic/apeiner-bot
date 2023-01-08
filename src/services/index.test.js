@@ -2,8 +2,8 @@ const {
   formatResponse,
   getSortedCollections,
   getFilteredCollections,
-} = require('./services');
-const { createDate } = require('./utils');
+} = require('.');
+const { createDate } = require('../utils');
 
 describe('formatResponse', () => {
   it('should format response', () => {
