@@ -10,7 +10,8 @@
     "generate-docs": "jsdoc src -r --destination docs --readme ./README.md --package ./package.json",
     "lint": "eslint . ",
     "lint:fix": "npm run lint -- --fix",
-    "migrate": "knex migrate:latest --knexfile knexfile.js",
+    "migrate": "knex migrate:latest",
+    "migrate:down": "knex migrate:down",
     "start": "node server.js",
     "telegram-webhook:set": "echo 'Y' | bottender telegram webhook set -w $1",
     "test": "jest"
