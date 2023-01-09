@@ -24,7 +24,7 @@ const handleMessage = async (context) => {
   }
 
   await context.sendMessage(
-    'In order to activate apeiner, send 0.05ETH to apeiner.eth.\nAfter you complete the first step, run the following command: /activate <YOUR_WALLET_ADDRESS>'
+    'In order to activate apeiner, send 0.05ETH to apeiner.eth\nAfter you complete the first step, send the message in the following format: \n/activate <YOUR WALLET ADDRESS>\nfor example: /activate 0x71C7656EC7ab88b098defB751B7401B5f6d8976F'
   );
 };
 
