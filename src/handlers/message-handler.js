@@ -11,6 +11,7 @@ async function HandleMessage(context) {
     return;
   }
 
+  await userService.handleMessage(context);
   const isBotCommand = !!context.event._rawEvent.message?.entities?.find(
     (entity) => entity.type === 'bot_command'
   );
