@@ -6,8 +6,10 @@ exports.up = function (knex) {
   return knex.schema.createTable('users', function (table) {
     table.integer('id').notNullable();
     table.string('username', 255).notNullable();
+    table.string('wallet_address').nullable();
     table.boolean('is_subscribed').defaultTo(false);
     table.boolean('is_active').defaultTo(false);
+    table.boolean('is_trial_valid').defaultTo(false);
     table.timestamps(true, true);
   });
 };

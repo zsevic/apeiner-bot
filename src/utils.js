@@ -40,8 +40,18 @@ const getDate = (seconds) => {
   return updatedDate;
 };
 
+/**
+ *
+ * @param {number} minutes
+ * @returns {string}
+ */
+const getStatusMessage = (minutes) => `Getting stats for last ${minutes} minute${
+  minutes !== 1 ? 's' : ''
+}...`;
+
 module.exports = {
   createDate,
   getDate,
+  getStatusMessage,
   getTime,
 };
