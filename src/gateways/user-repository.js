@@ -43,6 +43,16 @@ const getUserById = async (id) => {
  */
 const saveUser = async (user) => database('users').insert(user);
 
+/**
+ *
+ * @param {number} userId
+ * @param {string} walletAddress
+ */
+const setWalletAddress = async (userId, walletAddress) =>
+  database('users')
+    .where('id', userId)
+    .update({ wallet_address: walletAddress });
+
 module.exports = {
   activate,
   pause,
@@ -50,4 +60,5 @@ module.exports = {
   deactivateTrial,
   getUserById,
   saveUser,
+  setWalletAddress,
 };

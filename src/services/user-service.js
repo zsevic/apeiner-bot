@@ -1,4 +1,7 @@
-const { PAUSED_DEFAULT_MESSAGE, ACTIVATED_DEFAULT_MESSAGE } = require('../constants');
+const {
+  PAUSED_DEFAULT_MESSAGE,
+  ACTIVATED_DEFAULT_MESSAGE,
+} = require('../constants');
 const userRepository = require('../gateways/user-repository');
 const { getStatusMessage, getTime } = require('../utils');
 const service = require('./');
@@ -68,6 +71,21 @@ const getResponseMessage = async (context) => {
     const statusMessage = getStatusMessage(minutes);
     await context.sendMessage(statusMessage);
     return service.getResponseMessage(...time, userId);
+  }
+
+  const message = service.getMessage(context);
+  if (message.startsWith('activate') || message.startsWith('update')) {
+    const [, walletAddress] = message.split(' ');
+    if (!walletAddress) {
+      return `Wallet address is not valid, please try again`;
+    }
+    // TODO valid wallet address
+    await userRepository.setWalletAddress(userId, walletAddress);
+    return `Thanks for setting the wallet address, Apeiner will be activated once we verify the whole registration process`;
+  }
+
+  if (user.wallet_address) {
+    return `Apeiner will be activated once we verify the whole registration process\n\nYou can update the wallet address by sending the message in the following format: \n/update [YOUR WALLET ADDRESS]`;
   }
 
   return 'In order to activate apeiner, send 0.05ETH to apeiner.eth\n\nAfter you complete the first step, send the message in the following format: \n/activate [YOUR WALLET ADDRESS]\n\nfor example: /activate 0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
