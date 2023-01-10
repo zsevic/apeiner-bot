@@ -66,6 +66,9 @@ const getResponseMessage = async (seconds, minutes, userId) => {
     if (results.length === 0 && userId) {
       await userRepository.activateTrial(userId);
     }
+    if (results.length === 0) {
+      return getMessageForEmptyList(minutes, date);
+    }
     return getResponse(results, minutes, date);
   } catch (error) {
     logger.error(error, error.message);
@@ -356,7 +359,7 @@ const getResults = async (minutes, date) => {
   const sortedCollections = getSortedCollections(collections);
   const sortedCollectionsLength = sortedCollections.length;
   if (sortedCollectionsLength === 0) {
-    return getMessageForEmptyList(minutes, date);
+    return sortedCollections;
   }
   logger.info(
     `Adding collections info for ${sortedCollectionsLength} collections...`
@@ -369,7 +372,7 @@ const getResults = async (minutes, date) => {
   const filteredCollections = getFilteredCollections(sortedCollections);
   const filteredCollectionsLength = filteredCollections.length;
   if (filteredCollectionsLength === 0) {
-    return getMessageForEmptyList(minutes, date);
+    return filteredCollections;
   }
 
   try {
