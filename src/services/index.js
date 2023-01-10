@@ -62,7 +62,7 @@ const getPricesRange = (prices) => {
 const getResponseMessage = async (seconds, minutes, userId) => {
   try {
     const date = getDate(seconds);
-    const results = await getResults(minutes, date);
+    const results = await getResults(date);
     if (results.length === 0 && userId) {
       await userRepository.activateTrial(userId);
     }
@@ -353,7 +353,7 @@ const getSortedCollections = (collections) =>
  * @param {Date} date
  * @returns {Promise<string>}
  */
-const getResults = async (minutes, date) => {
+const getResults = async (date) => {
   const collections = await getCollections(date);
 
   const sortedCollections = getSortedCollections(collections);
