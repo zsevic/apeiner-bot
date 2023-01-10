@@ -54,6 +54,19 @@ const getPricesRange = (prices) => {
 
 /**
  *
+ * @param {Array<*>} results
+ * @param {number} userId
+ */
+const handleTrial = async (results, userId) => {
+  if (results.length === 0 && userId) {
+    await userRepository.activateTrial(userId);
+  } else if (results.length > 0 && userId) {
+    await userRepository.deactivateTrial(userId);
+  }
+};
+
+/**
+ *
  * @param {number} seconds
  * @param {number} minutes
  * @param {number} [userId]
@@ -63,9 +76,7 @@ const getResponseMessage = async (seconds, minutes, userId) => {
   try {
     const date = getDate(seconds);
     const results = await getResults(date);
-    if (results.length === 0 && userId) {
-      await userRepository.activateTrial(userId);
-    }
+    await handleTrial(results, userId);
     if (results.length === 0) {
       return getMessageForEmptyList(minutes, date);
     }
