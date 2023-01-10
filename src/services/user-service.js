@@ -43,6 +43,14 @@ const getResponseMessage = async (context) => {
     return getResponseMessageForNewUser(context, userId);
   }
 
+  if (user.is_subscribed && user.is_active) {
+    return `Apeiner is activated, if you want to pause it, reply with /pause message`;
+  }
+
+  if (user.is_subscribed && !user.is_active) {
+    return `Apeiner is paused, if you want to activate it, reply with /activate message`;
+  }
+
   if (user.is_trial_active) {
     const time = getTime('1');
     const [, minutes] = time;
