@@ -10,6 +10,7 @@ const {
 } = require('../constants');
 const { logger } = require('../logger');
 const nftApi = require('../gateways/nft-api');
+const userRepository = require('../gateways/user-repository');
 const { createDate, getDate } = require('../utils');
 /**
  * @private
