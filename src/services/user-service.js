@@ -44,10 +44,20 @@ const getResponseMessage = async (context) => {
   }
 
   if (user.is_subscribed && user.is_active) {
+    const message = service.getMessage(context);
+    if (message === 'pause') {
+      await userRepository.pause(userId);
+      return `Apeiner is paused, if you want to activate it, reply with /activate message`;
+    }
     return `Apeiner is activated, if you want to pause it, reply with /pause message`;
   }
 
   if (user.is_subscribed && !user.is_active) {
+    const message = service.getMessage(context);
+    if (message === 'activate') {
+      await userRepository.activate(userId);
+      return `Apeiner is activated, if you want to pause it, reply with /pause message`;
+    }
     return `Apeiner is paused, if you want to activate it, reply with /activate message`;
   }
 

@@ -115,6 +115,20 @@ const getResponseMessage = async (seconds, minutes, userId) => {
  */
 
 /**
+ * @param {*} context
+ * @returns {string}
+ */
+const getMessage = (context) => {
+  const isBotCommand = !!context.event._rawEvent.message?.entities?.find(
+    (entity) => entity.type === 'bot_command'
+  );
+  const message = isBotCommand
+    ? context.event.text.replace('/', '')
+    : context.event.text;
+  return message.trim();
+};
+
+/**
  *
  * @param {Array.<CollectionItem>} filteredCollections
  * @returns {string}
@@ -416,6 +430,7 @@ const getResults = async (date) => {
 module.exports = {
   formatResponse,
   getFilteredCollections,
+  getMessage,
   getSortedCollections,
   getResults,
   getResponse,

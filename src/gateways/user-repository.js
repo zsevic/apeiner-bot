@@ -4,6 +4,20 @@ const database = require('../config/database-config');
  *
  * @param {number} userId
  */
+const activate = async (userId) =>
+  database('users').where('id', userId).update({ is_active: true });
+
+/**
+ *
+ * @param {number} userId
+ */
+const pause = async (userId) =>
+  database('users').where('id', userId).update({ is_active: false });
+
+/**
+ *
+ * @param {number} userId
+ */
 const activateTrial = async (userId) =>
   database('users').where('id', userId).update({ is_trial_active: true });
 
@@ -30,6 +44,8 @@ const getUserById = async (id) => {
 const saveUser = async (user) => database('users').insert(user);
 
 module.exports = {
+  activate,
+  pause,
   activateTrial,
   deactivateTrial,
   getUserById,

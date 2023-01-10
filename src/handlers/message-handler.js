@@ -1,7 +1,7 @@
 const { replyMarkup, CHAT_ID } = require('../constants');
 const { logger } = require('../logger');
 const userService = require('../services/user-service');
-const { getResponseMessage } = require('../services');
+const { getResponseMessage, getMessage } = require('../services');
 const { getStatusMessage, getTime } = require('../utils');
 
 async function HandleMessage(context) {
@@ -13,12 +13,7 @@ async function HandleMessage(context) {
     });
   }
 
-  const isBotCommand = !!context.event._rawEvent.message?.entities?.find(
-    (entity) => entity.type === 'bot_command'
-  );
-  const message = isBotCommand
-    ? context.event.text.replace('/', '')
-    : context.event.text;
+  const message = getMessage(context);
   const time = getTime(message);
   const [, minutes] = time;
   const statusMessage = getStatusMessage(minutes);
