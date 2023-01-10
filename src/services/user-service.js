@@ -1,3 +1,4 @@
+const { PAUSED_DEFAULT_MESSAGE, ACTIVATED_DEFAULT_MESSAGE } = require('../constants');
 const userRepository = require('../gateways/user-repository');
 const { getStatusMessage, getTime } = require('../utils');
 const service = require('./');
@@ -47,18 +48,18 @@ const getResponseMessage = async (context) => {
     const message = service.getMessage(context);
     if (message === 'pause') {
       await userRepository.pause(userId);
-      return `Apeiner is paused, if you want to activate it, reply with /activate message`;
+      return PAUSED_DEFAULT_MESSAGE;
     }
-    return `Apeiner is activated, if you want to pause it, reply with /pause message`;
+    return ACTIVATED_DEFAULT_MESSAGE;
   }
 
   if (user.is_subscribed && !user.is_active) {
     const message = service.getMessage(context);
     if (message === 'activate') {
       await userRepository.activate(userId);
-      return `Apeiner is activated, if you want to pause it, reply with /pause message`;
+      return ACTIVATED_DEFAULT_MESSAGE;
     }
-    return `Apeiner is paused, if you want to activate it, reply with /activate message`;
+    return PAUSED_DEFAULT_MESSAGE;
   }
 
   if (user.is_trial_active) {

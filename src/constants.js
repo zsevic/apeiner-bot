@@ -12,6 +12,9 @@ const TIMEZONE = 'Europe/Belgrade';
 
 const CHAT_ID = 1618850255;
 
+const PAUSED_DEFAULT_MESSAGE = `Apeiner is paused, if you want to activate it, reply with /activate message`;
+const ACTIVATED_DEFAULT_MESSAGE = `Apeiner is activated, if you want to pause it, reply with /pause message`;
+
 const headers = {
   accept: '*/*',
   'content-type': 'application/json',
@@ -43,6 +46,7 @@ const replyMarkup = {
 };
 
 module.exports = {
+  ACTIVATED_DEFAULT_MESSAGE,
   CHAT_ID,
   COLLECTIONS_TO_ANALYZE,
   COLLECTION_RETRIEVAL_COUNTER,
@@ -56,6 +60,7 @@ module.exports = {
   MIN_VOLUME,
   NULL_ADDRESS,
   OPENSEA_API_BASE_URL,
+  PAUSED_DEFAULT_MESSAGE,
   PROTOCOLS,
   replyMarkup,
   TIMEZONE,
