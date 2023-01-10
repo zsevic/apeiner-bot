@@ -9,7 +9,7 @@ exports.up = function (knex) {
     table.string('wallet_address').nullable();
     table.boolean('is_subscribed').defaultTo(false);
     table.boolean('is_active').defaultTo(false);
-    table.boolean('is_trial_valid').defaultTo(false);
+    table.boolean('is_trial_active').defaultTo(false);
     table.timestamps(true, true);
   });
 };

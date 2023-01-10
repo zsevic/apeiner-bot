@@ -2,7 +2,7 @@ const { getClient } = require('bottender');
 const { CronJob } = require('cron');
 const { CHAT_ID, replyMarkup } = require('./constants');
 const { logger } = require('./logger');
-const { handleMessage } = require('./services');
+const { getResponseMessage } = require('./services');
 const { getTime } = require('./utils');
 
 const client = getClient('telegram');
@@ -18,7 +18,7 @@ const setupScheduler = () =>
       }...`;
       logger.info(statusMessage);
       await client.sendMessage(CHAT_ID, statusMessage);
-      const response = await handleMessage(...time);
+      const response = await getResponseMessage(...time);
 
       await client.sendMessage(CHAT_ID, response, {
         parseMode: 'HTML',

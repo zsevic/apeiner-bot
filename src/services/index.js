@@ -10,7 +10,7 @@ const {
 } = require('../constants');
 const { logger } = require('../logger');
 const nftApi = require('../gateways/nft-api');
-const { getDate, createDate } = require('../utils');
+const { createDate, getDate } = require('../utils');
 /**
  * @private
  * @param {Array.<CollectionItem>} collections
@@ -49,6 +49,27 @@ const getPricesRange = (prices) => {
   }
 
   return `${minPrice} - ${maxPrice}eth`;
+};
+
+/**
+ *
+ * @param {number} seconds
+ * @param {number} minutes
+ * @param {number} [userId]
+ * @returns {string}
+ */
+const getResponseMessage = async (seconds, minutes, userId) => {
+  try {
+    const date = getDate(seconds);
+    const results = await getResults(minutes, date);
+    if (results.length === 0 && userId) {
+      await userRepository.activateTrial(userId);
+    }
+    return getResponse(results, minutes, date);
+  } catch (error) {
+    logger.error(error, error.message);
+    return `Request failed: ${error.message}`;
+  }
 };
 
 /**
@@ -324,71 +345,64 @@ const getSortedCollections = (collections) =>
 
 /**
  *
- * @param {number} seconds
  * @param {number} minutes
+ * @param {Date} date
  * @returns {Promise<string>}
  */
-const handleMessage = async (seconds, minutes) => {
-  try {
-    const date = getDate(seconds);
-    const collections = await getCollections(date);
+const getResults = async (minutes, date) => {
+  const collections = await getCollections(date);
 
-    const sortedCollections = getSortedCollections(collections);
-    const sortedCollectionsLength = sortedCollections.length;
-    if (sortedCollectionsLength === 0) {
-      return getMessageForEmptyList(minutes, date);
-    }
-    logger.info(
-      `Adding collections info for ${sortedCollectionsLength} collections...`
-    );
-    await addCollectionsInfo(sortedCollections);
-    logger.info(
-      `Added collections info for ${sortedCollectionsLength} collections...`
-    );
-
-    const filteredCollections = getFilteredCollections(sortedCollections);
-    const filteredCollectionsLength = filteredCollections.length;
-    if (filteredCollectionsLength === 0) {
-      return getMessageForEmptyList(minutes, date);
-    }
-
-    try {
-      logger.info(
-        `Adding minting info for ${filteredCollectionsLength} collections...`
-      );
-      await addMintingInfo(filteredCollections);
-      logger.info(
-        `Added minting info for ${filteredCollectionsLength} collections...`
-      );
-    } catch (error) {
-      logger.error(error, 'Adding minting info failed...');
-    }
-
-    try {
-      logger.info(
-        `Adding collections stats for ${filteredCollectionsLength} collections...`
-      );
-      await addCollectionsStats(filteredCollections);
-      logger.info(
-        `Added collections stats for ${filteredCollectionsLength} collections...`
-      );
-    } catch (error) {
-      logger.error(error, 'Adding collections stats failed...');
-    }
-
-    logger.info(
-      `Sending stats for last ${minutes} minute${minutes !== 1 ? 's' : ''}...`
-    );
-    return getResponse(filteredCollections, minutes, date);
-  } catch (error) {
-    logger.error(error, error.message);
-    return `Request failed: ${error.message}`;
+  const sortedCollections = getSortedCollections(collections);
+  const sortedCollectionsLength = sortedCollections.length;
+  if (sortedCollectionsLength === 0) {
+    return getMessageForEmptyList(minutes, date);
   }
+  logger.info(
+    `Adding collections info for ${sortedCollectionsLength} collections...`
+  );
+  await addCollectionsInfo(sortedCollections);
+  logger.info(
+    `Added collections info for ${sortedCollectionsLength} collections...`
+  );
+
+  const filteredCollections = getFilteredCollections(sortedCollections);
+  const filteredCollectionsLength = filteredCollections.length;
+  if (filteredCollectionsLength === 0) {
+    return getMessageForEmptyList(minutes, date);
+  }
+
+  try {
+    logger.info(
+      `Adding minting info for ${filteredCollectionsLength} collections...`
+    );
+    await addMintingInfo(filteredCollections);
+    logger.info(
+      `Added minting info for ${filteredCollectionsLength} collections...`
+    );
+  } catch (error) {
+    logger.error(error, 'Adding minting info failed...');
+  }
+
+  try {
+    logger.info(
+      `Adding collections stats for ${filteredCollectionsLength} collections...`
+    );
+    await addCollectionsStats(filteredCollections);
+    logger.info(
+      `Added collections stats for ${filteredCollectionsLength} collections...`
+    );
+  } catch (error) {
+    logger.error(error, 'Adding collections stats failed...');
+  }
+
+  return filteredCollections;
 };
 
 module.exports = {
   formatResponse,
   getFilteredCollections,
   getSortedCollections,
-  handleMessage,
+  getResults,
+  getResponse,
+  getResponseMessage,
 };
