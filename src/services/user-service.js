@@ -77,7 +77,10 @@ const getResponseMessage = async (context) => {
   const message = service.getMessage(context);
   if (message.startsWith('activate') || message.startsWith('update')) {
     const [, walletAddress] = message.split(' ');
-    if (!walletAddress || (!walletAddress.endsWith('.eth') && !utils.isAddress(walletAddress))) {
+    if (
+      !walletAddress ||
+      (!walletAddress.endsWith('.eth') && !utils.isAddress(walletAddress))
+    ) {
       return `Wallet address is not valid, please try again`;
     }
 
