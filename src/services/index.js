@@ -102,6 +102,7 @@ const getResponseMessage = async (seconds, minutes, userId) => {
  * @property {boolean} [isMinting]
  * @property {boolean} isRevealed
  * @property {number} floorPrice
+ * @property {number} [bestOffer]
  * @property {number} averagePrice
  * @property {number} oneHourAveragePrice
  * @property {number} oneHourSales
@@ -163,6 +164,8 @@ const formatResponse = (filteredCollections) =>
       }${result.isMinting ? 'MINTING\n' : ''}${
         result.isUnrevealed ? 'UNREVEALED\n' : ''
       }sold for ${price}\nfloor: ${result.floorPrice}eth\n${
+        result.bestOffer ? 'best offer: ' + result.bestOffer + 'weth\n' : ''
+      }${
         result.averagePrice && result.oneHourAveragePrice > 0
           ? 'one hour average price: ' + result.oneHourAveragePrice + 'eth\n'
           : ''
@@ -205,7 +208,11 @@ const addCollectionsInfo = async (collections) =>
     collections.map(async (collectionItem) => {
       const collectionSlug = collectionItem.slug;
       const collectionData = await nftApi.getCollectionInfo(collectionSlug);
+      const bestOffer =
+        collectionData?.collectionOffers?.edges?.[0]?.node?.priceType?.eth;
       const stats = collectionData.statsV2;
+      collectionItem.bestOffer =
+        bestOffer && Number.parseFloat(bestOffer).toFixed(3) * 1;
       collectionItem.contractAddress =
         collectionData.assetContracts?.edges?.[0]?.node?.address;
       collectionItem.createdDate = createDate(collectionData.createdDate);
