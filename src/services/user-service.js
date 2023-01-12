@@ -1,3 +1,4 @@
+const { utils } = require('ethers');
 const {
   PAUSED_DEFAULT_MESSAGE,
   ACTIVATED_DEFAULT_MESSAGE,
@@ -76,10 +77,10 @@ const getResponseMessage = async (context) => {
   const message = service.getMessage(context);
   if (message.startsWith('activate') || message.startsWith('update')) {
     const [, walletAddress] = message.split(' ');
-    if (!walletAddress) {
+    if (!walletAddress || (!walletAddress.endsWith('.eth') && !utils.isAddress(walletAddress))) {
       return `Wallet address is not valid, please try again`;
     }
-    // TODO valid wallet address
+
     await userRepository.setWalletAddress(userId, walletAddress);
     return `Thanks for setting the wallet address, Apeiner will be activated once we verify the whole registration process`;
   }
