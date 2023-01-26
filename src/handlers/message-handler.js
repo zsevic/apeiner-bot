@@ -1,8 +1,6 @@
 const { replyMarkup, CHAT_ID } = require('../constants');
-const { logger } = require('../logger');
+const adminService = require('../services/admin-service');
 const userService = require('../services/user-service');
-const { getResponseMessage, getMessage } = require('../services');
-const { getStatusMessage, getTime } = require('../utils');
 
 async function HandleMessage(context) {
   const chatId = context.event._rawEvent.message?.chat?.id;
@@ -13,15 +11,8 @@ async function HandleMessage(context) {
     });
   }
 
-  const message = getMessage(context);
-  const time = getTime(message);
-  const [, minutes] = time;
-  const statusMessage = getStatusMessage(minutes);
-  logger.info(statusMessage);
-  await context.sendMessage(statusMessage);
-  const response = await getResponseMessage(...time);
-
-  await context.sendMessage(response, {
+  const responseMessage = await adminService.getResponse(context);
+  await context.sendMessage(responseMessage, {
     parseMode: 'HTML',
     replyMarkup,
   });
