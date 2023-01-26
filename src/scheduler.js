@@ -21,23 +21,27 @@ const setupScheduler = () =>
 
       const subscribedUsersId = await userRepository.getSubscribedUserIds();
       await Promise.all(
-        subscribedUsersId.map((userId) =>
-          client
-            .sendMessage(userId, statusMessage)
-            .catch((error) => logger.warn(error))
-        )
+        subscribedUsersId
+          .filter((userId) => userId !== CHAT_ID)
+          .map((userId) =>
+            client
+              .sendMessage(userId, statusMessage)
+              .catch((error) => logger.warn(error))
+          )
       );
       await client.sendMessage(CHAT_ID, statusMessage);
 
       const response = await getResponseMessage(...time);
       await Promise.all(
-        subscribedUsersId.map((userId) =>
-          client
-            .sendMessage(userId, response, {
-              parseMode: 'HTML',
-            })
-            .catch((error) => logger.warn(error))
-        )
+        subscribedUsersId
+          .filter((userId) => userId !== CHAT_ID)
+          .map((userId) =>
+            client
+              .sendMessage(userId, response, {
+                parseMode: 'HTML',
+              })
+              .catch((error) => logger.warn(error))
+          )
       );
       await client.sendMessage(CHAT_ID, response, {
         parseMode: 'HTML',
