@@ -18,10 +18,18 @@ const setupScheduler = () =>
         minutes !== 1 ? 's' : ''
       }...`;
       logger.info(statusMessage);
-      await client.sendMessage(CHAT_ID, statusMessage);
-      const response = await getResponseMessage(...time);
-      const subscribedUsersId = await userRepository.getSubscribedUserIds();
 
+      const subscribedUsersId = await userRepository.getSubscribedUserIds();
+      await Promise.all(
+        subscribedUsersId.map((userId) =>
+          client
+            .sendMessage(userId, statusMessage)
+            .catch((error) => logger.warn(error))
+        )
+      );
+      await client.sendMessage(CHAT_ID, statusMessage);
+
+      const response = await getResponseMessage(...time);
       await Promise.all(
         subscribedUsersId.map((userId) =>
           client
