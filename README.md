@@ -16,6 +16,7 @@ cd apeiner-bot
 cp .env.sample .env # change values after copying
 nvm use 18
 npm i
+docker-compose up
 npm run dev
 ```
 
