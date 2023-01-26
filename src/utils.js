@@ -1,3 +1,4 @@
+const { utils } = require('ethers');
 const { DATETIME_FORMAT } = require('./constants');
 /**
  *
@@ -42,6 +43,17 @@ const getDate = (seconds) => {
 
 /**
  *
+ * @param {string} [walletAddress]
+ * @returns {boolean}
+ */
+const isValidWalletAddress = (walletAddress) =>
+  !!(
+    walletAddress &&
+    (walletAddress.endsWith('.eth') || utils.isAddress(walletAddress))
+  );
+
+/**
+ *
  * @param {number} minutes
  * @returns {string}
  */
@@ -53,4 +65,5 @@ module.exports = {
   getDate,
   getStatusMessage,
   getTime,
+  isValidWalletAddress,
 };

@@ -16,6 +16,15 @@ const pause = async (userId) =>
 
 /**
  *
+ * @param {string} wallet
+ */
+const subscribe = async (walletAddress) =>
+  database('users')
+    .where('wallet_address', walletAddress)
+    .update({ is_subscribed: true, is_active: true });
+
+/**
+ *
  * @param {number} userId
  */
 const activateTrial = async (userId) =>
@@ -34,6 +43,15 @@ const deactivateTrial = async (userId) =>
  */
 const getUserById = async (id) => {
   const users = await database('users').where('id', id);
+  return users[0];
+};
+
+/**
+ *
+ * @param {string} walletAddress
+ */
+const getUserByWalletAddress = async (walletAddress) => {
+  const users = await database('users').where('wallet_address', walletAddress);
   return users[0];
 };
 
@@ -59,6 +77,8 @@ module.exports = {
   activateTrial,
   deactivateTrial,
   getUserById,
+  getUserByWalletAddress,
   saveUser,
   setWalletAddress,
+  subscribe,
 };

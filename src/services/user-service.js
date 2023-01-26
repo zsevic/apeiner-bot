@@ -1,10 +1,9 @@
-const { utils } = require('ethers');
 const {
   PAUSED_DEFAULT_MESSAGE,
   ACTIVATED_DEFAULT_MESSAGE,
 } = require('../constants');
 const userRepository = require('../gateways/user-repository');
-const { getStatusMessage, getTime } = require('../utils');
+const { getStatusMessage, getTime, isValidWalletAddress } = require('../utils');
 const service = require('./');
 
 /**
@@ -77,10 +76,7 @@ const getResponseMessage = async (context) => {
   const message = service.getMessage(context);
   if (message.startsWith('activate') || message.startsWith('update')) {
     const [, walletAddress] = message.split(' ');
-    if (
-      !walletAddress ||
-      (!walletAddress.endsWith('.eth') && !utils.isAddress(walletAddress))
-    ) {
+    if (!isValidWalletAddress(walletAddress)) {
       return `Wallet address is not valid, please try again`;
     }
 
