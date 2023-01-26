@@ -4,6 +4,7 @@ const { CHAT_ID, replyMarkup } = require('./constants');
 const { logger } = require('./logger');
 const { getResponseMessage } = require('./services');
 const { getTime } = require('./utils');
+const userRepository = require('./gateways/user-repository');
 
 const client = getClient('telegram');
 
@@ -19,7 +20,17 @@ const setupScheduler = () =>
       logger.info(statusMessage);
       await client.sendMessage(CHAT_ID, statusMessage);
       const response = await getResponseMessage(...time);
+      const subscribedUsersId = await userRepository.getSubscribedUserIds();
 
+      await Promise.all(
+        subscribedUsersId.map((userId) =>
+          client
+            .sendMessage(userId, response, {
+              parseMode: 'HTML',
+            })
+            .catch((error) => logger.warn(error))
+        )
+      );
       await client.sendMessage(CHAT_ID, response, {
         parseMode: 'HTML',
         replyMarkup,

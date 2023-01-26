@@ -89,6 +89,17 @@ const getUserByWalletAddress = async (walletAddress) => {
 };
 
 /**
+ * @returns {Promise<string[]>}
+ */
+const getSubscribedUserIds = async () => {
+  const users = await database('users').select('id').where({
+    is_subscribed: true,
+    is_active: true,
+  });
+  return users.map((user) => user.id);
+};
+
+/**
  *
  * @param {User} user
  */
@@ -112,6 +123,7 @@ module.exports = {
   getNumberOfUsers,
   getNumberOfActiveUsers,
   getNumberOfSubscribedUsers,
+  getSubscribedUserIds,
   getUserById,
   getUserByWalletAddress,
   saveUser,
