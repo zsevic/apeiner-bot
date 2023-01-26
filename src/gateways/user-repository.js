@@ -25,6 +25,15 @@ const subscribe = async (walletAddress) =>
 
 /**
  *
+ * @returns {number}
+ */
+const getNumberOfUsers = async () => {
+  const result = await database('users').count('id').first();
+  return result.count;
+};
+
+/**
+ *
  * @param {number} userId
  */
 const activateTrial = async (userId) =>
@@ -76,6 +85,7 @@ module.exports = {
   pause,
   activateTrial,
   deactivateTrial,
+  getNumberOfUsers,
   getUserById,
   getUserByWalletAddress,
   saveUser,

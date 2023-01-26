@@ -19,6 +19,23 @@ const handleSubscription = async (message) => {
 
 /**
  *
+ * @param {string} message
+ * @returns {string}
+ */
+const handleUsers = async (message) => {
+  const [, operation] = message.split(' ');
+  if (!operation) {
+    return 'Command is not valid';
+  }
+
+  if (operation === 'total') {
+    const number = await userRepository.getNumberOfUsers();
+    return `${number} user(s)`;
+  }
+};
+
+/**
+ *
  * @param {*} context
  * @returns {string}
  */
@@ -26,6 +43,10 @@ const getResponse = async (context) => {
   const message = getMessage(context);
   if (message.startsWith('subscribe')) {
     return handleSubscription(message);
+  }
+
+  if (message.startsWith('users')) {
+    return handleUsers(message);
   }
 
   const time = getTime(message);
