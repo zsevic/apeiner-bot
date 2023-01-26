@@ -34,6 +34,30 @@ const getNumberOfUsers = async () => {
 
 /**
  *
+ * @returns {number}
+ */
+const getNumberOfSubscribedUsers = async () => {
+  const result = await database('users')
+    .count('id')
+    .where({ is_subscribed: true })
+    .first();
+  return result.count;
+};
+
+/**
+ *
+ * @returns {number}
+ */
+const getNumberOfActiveUsers = async () => {
+  const result = await database('users')
+    .count('id')
+    .where({ is_active: true })
+    .first();
+  return result.count;
+};
+
+/**
+ *
  * @param {number} userId
  */
 const activateTrial = async (userId) =>
@@ -86,6 +110,8 @@ module.exports = {
   activateTrial,
   deactivateTrial,
   getNumberOfUsers,
+  getNumberOfActiveUsers,
+  getNumberOfSubscribedUsers,
   getUserById,
   getUserByWalletAddress,
   saveUser,

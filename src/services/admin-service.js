@@ -28,9 +28,11 @@ const handleUsers = async (message) => {
     return 'Command is not valid';
   }
 
-  if (operation === 'total') {
-    const number = await userRepository.getNumberOfUsers();
-    return `${number} user(s)`;
+  if (operation === 'stats') {
+    const total = await userRepository.getNumberOfUsers();
+    const subscribed = await userRepository.getNumberOfSubscribedUsers();
+    const active = await userRepository.getNumberOfActiveUsers();
+    return `${total} total user(s), ${subscribed} subscribed, ${active} active`;
   }
 };
 
