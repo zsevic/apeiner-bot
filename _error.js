@@ -1,6 +1,6 @@
 const { logger } = require('./src/logger');
 
-module.exports = handleError = async (context, props) => {
+module.exports = async (context, props) => {
   logger.error(props.error);
 
   await context.sendMessage(
