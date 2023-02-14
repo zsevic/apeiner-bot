@@ -45,6 +45,16 @@ const replyMarkup = {
   ],
 };
 
+const userReplyMarkup = {
+  keyboard: [
+    [
+      {
+        text: '/pause',
+      },
+    ],
+  ],
+};
+
 module.exports = {
   ACTIVATED_DEFAULT_MESSAGE,
   CHAT_ID,
@@ -63,5 +73,6 @@ module.exports = {
   PAUSED_DEFAULT_MESSAGE,
   PROTOCOLS,
   replyMarkup,
+  userReplyMarkup,
   TIMEZONE,
 };
