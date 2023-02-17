@@ -301,7 +301,9 @@ describe('HandleMessage', () => {
         sendMessage: jest.fn(),
       };
       const errorMessage = 'Request failed with status 400';
-      jest.spyOn(nftApi, 'getEvents').mockRejectedValue(new Error(errorMessage));
+      jest
+        .spyOn(nftApi, 'getEvents')
+        .mockRejectedValue(new Error(errorMessage));
       jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
 
       await HandleMessage(context);
