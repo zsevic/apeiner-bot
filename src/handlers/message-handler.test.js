@@ -156,6 +156,7 @@ describe('HandleMessage', () => {
         created_at: '2023-01-26T22:37:33.220Z',
         updated_at: '2023-01-26T22:37:33.220Z',
       });
+      jest.spyOn(userRepository, 'subscribe').mockResolvedValue(null);
 
       await HandleMessage(context);
 
