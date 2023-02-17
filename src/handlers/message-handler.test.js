@@ -1,6 +1,8 @@
 const { HandleMessage } = require('./message-handler');
 const { CHAT_ID, defaultAdminReply } = require('../constants');
+const nftApi = require('../gateways/nft-api');
 const userRepository = require('../gateways/user-repository');
+const utils = require('../utils');
 
 describe('HandleMessage', () => {
   describe('/users command', () => {
@@ -162,6 +164,43 @@ describe('HandleMessage', () => {
 
       expect(context.sendMessage).toBeCalledWith(
         'User is subscribed successfully',
+        defaultAdminReply
+      );
+    });
+  });
+
+  describe('/1 command', () => {
+    it('should return default message when there are no events', async () => {
+      const context = {
+        event: {
+          text: '/1',
+          _rawEvent: {
+            message: {
+              entities: [
+                {
+                  type: 'bot_command',
+                },
+              ],
+              chat: {
+                id: CHAT_ID,
+              },
+            },
+          },
+        },
+        sendMessage: jest.fn(),
+      };
+      jest.spyOn(nftApi, 'getEvents').mockResolvedValue(null);
+      jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
+
+      await HandleMessage(context);
+
+      expect(context.sendMessage).toHaveBeenNthCalledWith(
+        1,
+        'Getting stats for last 1 minute...'
+      );
+      expect(context.sendMessage).toHaveBeenNthCalledWith(
+        2,
+        'There are no bought NFTs in last 1 minute (after 1:00:00 AM)',
         defaultAdminReply
       );
     });

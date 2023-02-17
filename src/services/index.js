@@ -11,7 +11,7 @@ const {
 const { logger } = require('../logger');
 const nftApi = require('../gateways/nft-api');
 const userRepository = require('../gateways/user-repository');
-const { createDate, getDate } = require('../utils');
+const utils = require('../utils');
 /**
  * @private
  * @param {Array.<CollectionItem>} collections
@@ -74,7 +74,7 @@ const handleTrial = async (results, userId) => {
  */
 const getResponseMessage = async (seconds, minutes, userId) => {
   try {
-    const date = getDate(seconds);
+    const date = utils.getDate(seconds);
     const results = await getResults(date);
     await handleTrial(results, userId);
     if (results.length === 0) {
@@ -215,7 +215,7 @@ const addCollectionsInfo = async (collections) =>
         bestOffer && Number.parseFloat(bestOffer).toFixed(3) * 1;
       collectionItem.contractAddress =
         collectionData.assetContracts?.edges?.[0]?.node?.address;
-      collectionItem.createdDate = createDate(collectionData.createdDate);
+      collectionItem.createdDate = utils.createDate(collectionData.createdDate);
       collectionItem.floorPrice =
         stats.floorPrice?.unit &&
         Number.parseFloat(stats.floorPrice.unit).toFixed(3) * 1;
