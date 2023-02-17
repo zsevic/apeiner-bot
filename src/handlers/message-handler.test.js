@@ -30,6 +30,10 @@ const thirdGetCollectionStatsResponse = require('./mocks/data/get-collection-sta
 
 describe('HandleMessage', () => {
   const results = `Bought NFTs in last 1 minute (after 1:00:00 AM)\n\n&#x2713; <a href="https://gem.xyz/collection/thememes6529">The Memes by 6529</a>: 3 sales\nunique buyers: 1\nunique sellers: 3\nsold for 0.22 - 0.224eth\nfloor: 0.092eth\nbest offer: 0.08weth\none hour average price: 0.091eth\naverage price: 0.12eth\none hour sales: 17\ntotal sales: 9350\ntotal volume: 1120.4eth\nlisted/supply: 187/2000\nowners/supply: 1063/2000\nroyalty: 0%\ncreation date: 24 November 2022\n<a href="https://twitter.com/cryptobirbsnft">twitter</a>\n<a href="https://coniun.io/collection/thememes6529/dashboard">dashboard</a>\n\n<a href="https://gem.xyz/collection/emblem-vault">Emblem Vault [Ethereum]</a>: 1 sale\nsold for 1.15eth\nfloor: 0.58eth\nbest offer: 1.122weth\none hour average price: 1.229eth\naverage price: 0.878eth\none hour sales: 12\ntotal sales: 3631\ntotal volume: 3186.8eth\nlisted/supply: 579/5611\nowners/supply: 1804/5611\nroyalty: 0%\ncreation date: 12 February 2023\n<a href="https://twitter.com/jackbutcher">twitter</a>\n<a href="https://coniun.io/collection/emblem-vault/dashboard">dashboard</a>\n\n&#x2713; <a href="https://gem.xyz/collection/vv-checks-originals">Checks - VV Originals</a>: 1 sale\nsold for 3.9eth\nfloor: 0.011eth\nbest offer: 0.008weth\none hour average price: 0.023eth\naverage price: 0.097eth\ntotal sales: 13571\ntotal volume: 1318.2eth\nlisted/supply: 213/7777\nowners/supply: 1614/7777\nroyalty: 7.5%\ncreation date: 31 March 2022\n<a href="https://twitter.com/DreadfulzNFT">twitter</a>\n<a href="https://coniun.io/collection/vv-checks-originals/dashboard">dashboard</a>\n`;
+  const messageWithNoEvents =
+    'There are no bought NFTs in last 1 minute (after 1:00:00 AM)';
+  const statusMessage = 'Getting stats for last 1 minute...';
+
   describe('admin', () => {
     describe('/users command', () => {
       it('should return error message command is not valid', async () => {
@@ -222,13 +226,10 @@ describe('HandleMessage', () => {
 
         await HandleMessage(context);
 
-        expect(context.sendMessage).toHaveBeenNthCalledWith(
-          1,
-          'Getting stats for last 1 minute...'
-        );
+        expect(context.sendMessage).toHaveBeenNthCalledWith(1, statusMessage);
         expect(context.sendMessage).toHaveBeenNthCalledWith(
           2,
-          'There are no bought NFTs in last 1 minute (after 1:00:00 AM)',
+          messageWithNoEvents,
           defaultAdminReply
         );
       });
@@ -281,10 +282,7 @@ describe('HandleMessage', () => {
 
         await HandleMessage(context);
 
-        expect(context.sendMessage).toHaveBeenNthCalledWith(
-          1,
-          'Getting stats for last 1 minute...'
-        );
+        expect(context.sendMessage).toHaveBeenNthCalledWith(1, statusMessage);
         expect(context.sendMessage).toHaveBeenNthCalledWith(
           2,
           results,
@@ -319,10 +317,7 @@ describe('HandleMessage', () => {
 
         await HandleMessage(context);
 
-        expect(context.sendMessage).toHaveBeenNthCalledWith(
-          1,
-          'Getting stats for last 1 minute...'
-        );
+        expect(context.sendMessage).toHaveBeenNthCalledWith(1, statusMessage);
         expect(context.sendMessage).toHaveBeenNthCalledWith(
           2,
           `Request failed: ${errorMessage}`,
@@ -386,13 +381,10 @@ describe('HandleMessage', () => {
           username,
         });
         expect(activateTrialSpy).toBeCalledWith(userChatId);
-        expect(context.sendMessage).toHaveBeenNthCalledWith(
-          1,
-          'Getting stats for last 1 minute...'
-        );
+        expect(context.sendMessage).toHaveBeenNthCalledWith(1, statusMessage);
         expect(context.sendMessage).toHaveBeenNthCalledWith(
           2,
-          'There are no bought NFTs in last 1 minute (after 1:00:00 AM)',
+          messageWithNoEvents,
           defaultReply
         );
       });
@@ -458,10 +450,7 @@ describe('HandleMessage', () => {
           username,
         });
         expect(deactivateTrialSpy).toBeCalledWith(userChatId);
-        expect(context.sendMessage).toHaveBeenNthCalledWith(
-          1,
-          'Getting stats for last 1 minute...'
-        );
+        expect(context.sendMessage).toHaveBeenNthCalledWith(1, statusMessage);
         expect(context.sendMessage).toHaveBeenNthCalledWith(
           2,
           results,
@@ -617,6 +606,118 @@ describe('HandleMessage', () => {
         expect(activateSpy).not.toHaveBeenCalled();
         expect(context.sendMessage).toBeCalledWith(
           PAUSED_DEFAULT_MESSAGE,
+          defaultReply
+        );
+      });
+
+      it('should return results for the user with trial', async () => {
+        const context = {
+          event: {
+            text: '/start',
+            _rawEvent: {
+              message: {
+                entities: [
+                  {
+                    type: 'bot_command',
+                  },
+                ],
+                chat: {
+                  id: userChatId,
+                  username,
+                },
+              },
+            },
+          },
+          sendMessage: jest.fn(),
+        };
+
+        jest
+          .spyOn(nftApi, 'getEvents')
+          .mockResolvedValueOnce(firstGetEventsResponse)
+          .mockResolvedValueOnce(null);
+        jest
+          .spyOn(nftApi, 'getCollectionInfo')
+          .mockResolvedValueOnce(firstGetCollectionInfoResponse)
+          .mockResolvedValueOnce(secondGetCollectionInfoResponse)
+          .mockResolvedValueOnce(thirdGetCollectionInfoResponse)
+          .mockResolvedValueOnce(fourthGetCollectionInfoResponse)
+          .mockResolvedValueOnce(fifthGetCollectionInfoResponse)
+          .mockResolvedValueOnce(sixthGetCollectionInfoResponse)
+          .mockResolvedValueOnce(seventhGetCollectionInfoResponse);
+        jest
+          .spyOn(nftApi, 'getAssetEvents')
+          .mockResolvedValueOnce(firstGetAssetEventsResponse)
+          .mockResolvedValueOnce(secondGetAssetEventsResponse)
+          .mockResolvedValueOnce(thirdGetAssetEventsResponse);
+        jest
+          .spyOn(nftApi, 'getCollectionStats')
+          .mockResolvedValueOnce(firstGetCollectionStatsResponse)
+          .mockResolvedValueOnce(secondGetCollectionStatsResponse)
+          .mockResolvedValueOnce(thirdGetCollectionStatsResponse);
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue({
+          ...user,
+          is_trial_active: true,
+          is_subscribed: false,
+          is_active: false,
+        });
+        const deactivateTrialSpy = jest
+          .spyOn(userRepository, 'deactivateTrial')
+          .mockResolvedValue(null);
+
+        jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
+
+        await HandleMessage(context);
+
+        expect(deactivateTrialSpy).toBeCalledWith(userChatId);
+        expect(context.sendMessage).toHaveBeenNthCalledWith(1, statusMessage);
+        expect(context.sendMessage).toHaveBeenNthCalledWith(
+          2,
+          results,
+          defaultReply
+        );
+      });
+
+      it('should return no events for the user with trial', async () => {
+        const context = {
+          event: {
+            text: '/start',
+            _rawEvent: {
+              message: {
+                entities: [
+                  {
+                    type: 'bot_command',
+                  },
+                ],
+                chat: {
+                  id: userChatId,
+                  username,
+                },
+              },
+            },
+          },
+          sendMessage: jest.fn(),
+        };
+
+        jest.spyOn(nftApi, 'getEvents').mockResolvedValue(null);
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue({
+          ...user,
+          is_trial_active: true,
+          is_subscribed: false,
+          is_active: false,
+        });
+        const activateTrialSpy = jest
+          .spyOn(userRepository, 'activateTrial')
+          .mockResolvedValue(null);
+
+        jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
+
+        await HandleMessage(context);
+
+        expect(activateTrialSpy).toBeCalledWith(userChatId);
+        expect(context.sendMessage).toHaveBeenNthCalledWith(1, statusMessage);
+        expect(context.sendMessage).toHaveBeenNthCalledWith(
+          2,
+          messageWithNoEvents,
           defaultReply
         );
       });
