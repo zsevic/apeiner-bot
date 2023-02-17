@@ -19,6 +19,8 @@ const ACTIVATION_MESSAGE =
   'In order to activate apeiner, send 0.05ETH to apeiner.eth\n\nAfter you complete the first step, send the message in the following format: \n/activate [YOUR WALLET ADDRESS]\n\nfor example: /activate 0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
 const INVALID_WALLET_MESSAGE = 'Wallet address is not valid, please try again';
 const SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE = `Thanks for setting the wallet address, Apeiner will be activated once we verify the whole registration process`;
+const ERROR_MESSAGE =
+  'There are some unexpected errors that happened. Please try again later. Sorry for the inconvenience.';
 
 const headers = {
   accept: '*/*',
@@ -86,6 +88,7 @@ module.exports = {
   defaultReply,
   defaultAdminReply,
   defaultUserReply,
+  ERROR_MESSAGE,
   ETH,
   WETH,
   headers,

@@ -1,3 +1,4 @@
+const { getClient } = require('bottender');
 const {
   COLLECTIONS_TO_ANALYZE,
   MAX_TOTAL_SUPPLY,
@@ -7,11 +8,14 @@ const {
   TIMEZONE,
   NULL_ADDRESS,
   WETH,
+  CHAT_ID,
+  ERROR_MESSAGE,
 } = require('../constants');
 const { logger } = require('../logger');
 const nftApi = require('../gateways/nft-api');
 const userRepository = require('../gateways/user-repository');
 const utils = require('../utils');
+const client = getClient('telegram');
 /**
  * @private
  * @param {Array.<CollectionItem>} collections
@@ -83,7 +87,12 @@ const getResponseMessage = async (seconds, minutes, userId) => {
     return getResponse(results, minutes, date);
   } catch (error) {
     logger.error(error, error.message);
-    return `Request failed: ${error.message}`;
+
+    if (process.env.NODE_ENV === 'production') {
+      client.sendMessage(CHAT_ID, error.stack);
+    }
+
+    return ERROR_MESSAGE;
   }
 };
 

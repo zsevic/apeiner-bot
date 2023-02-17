@@ -9,6 +9,7 @@ const {
   ACTIVATION_IN_PROGRESS_MESSAGE,
   ACTIVATION_MESSAGE,
   SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE,
+  ERROR_MESSAGE,
 } = require('../constants');
 const nftApi = require('../gateways/nft-api');
 const userRepository = require('../gateways/user-repository');
@@ -327,7 +328,7 @@ describe('HandleMessage', () => {
         expect(context.sendMessage).toHaveBeenNthCalledWith(1, statusMessage);
         expect(context.sendMessage).toHaveBeenNthCalledWith(
           2,
-          `Request failed: ${errorMessage}`,
+          ERROR_MESSAGE,
           defaultAdminReply
         );
       });
