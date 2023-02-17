@@ -1,5 +1,5 @@
 const { HandleMessage } = require('./message-handler');
-const { CHAT_ID, defaultAdminReply } = require('../constants');
+const { CHAT_ID, defaultAdminReply, defaultReply } = require('../constants');
 const nftApi = require('../gateways/nft-api');
 const userRepository = require('../gateways/user-repository');
 const utils = require('../utils');
@@ -319,6 +319,60 @@ describe('HandleMessage', () => {
           2,
           `Request failed: ${errorMessage}`,
           defaultAdminReply
+        );
+      });
+    });
+  });
+
+  describe('user', () => {
+    const userChatId = 1;
+    const username = 'tester';
+    describe('/start command', () => {
+      it('should handle case when there are no events', async () => {
+        const context = {
+          event: {
+            text: '/start',
+            _rawEvent: {
+              message: {
+                entities: [
+                  {
+                    type: 'bot_command',
+                  },
+                ],
+                chat: {
+                  id: userChatId,
+                  username,
+                },
+              },
+            },
+          },
+          sendMessage: jest.fn(),
+        };
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue(null);
+        const saveSpy = jest
+          .spyOn(userRepository, 'saveUser')
+          .mockResolvedValue(null);
+        const activateTrialSpy = jest
+          .spyOn(userRepository, 'activateTrial')
+          .mockResolvedValue(null);
+        jest.spyOn(nftApi, 'getEvents').mockResolvedValue(null);
+        jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
+
+        await HandleMessage(context);
+
+        expect(saveSpy).toBeCalledWith({
+          id: userChatId,
+          username,
+        });
+        expect(activateTrialSpy).toBeCalledWith(userChatId);
+        expect(context.sendMessage).toHaveBeenNthCalledWith(
+          1,
+          'Getting stats for last 1 minute...'
+        );
+        expect(context.sendMessage).toHaveBeenNthCalledWith(
+          2,
+          'There are no bought NFTs in last 1 minute (after 1:00:00 AM)',
+          defaultReply
         );
       });
     });
