@@ -582,6 +582,44 @@ describe('HandleMessage', () => {
           defaultReply
         );
       });
+
+      it('should return default message for inactive user', async () => {
+        const context = {
+          event: {
+            text: '/some-command',
+            _rawEvent: {
+              message: {
+                entities: [
+                  {
+                    type: 'bot_command',
+                  },
+                ],
+                chat: {
+                  id: userChatId,
+                  username,
+                },
+              },
+            },
+          },
+          sendMessage: jest.fn(),
+        };
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue({
+          ...user,
+          is_subscribed: true,
+          is_active: false,
+        });
+        const activateSpy = jest
+          .spyOn(userRepository, 'activate')
+          .mockResolvedValue(null);
+
+        await HandleMessage(context);
+
+        expect(activateSpy).not.toHaveBeenCalled();
+        expect(context.sendMessage).toBeCalledWith(
+          PAUSED_DEFAULT_MESSAGE,
+          defaultReply
+        );
+      });
     });
   });
 });
