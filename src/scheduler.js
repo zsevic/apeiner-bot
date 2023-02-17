@@ -1,6 +1,6 @@
 const { getClient } = require('bottender');
 const { CronJob } = require('cron');
-const { CHAT_ID, replyMarkup, defaultUserReply } = require('./constants');
+const { CHAT_ID, defaultUserReply } = require('./constants');
 const { logger } = require('./logger');
 const { getResponseMessage } = require('./services');
 const { getTime } = require('./utils');
