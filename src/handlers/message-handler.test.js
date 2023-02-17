@@ -280,5 +280,41 @@ describe('HandleMessage', () => {
         defaultAdminReply
       );
     });
+
+    it('should return error message when request to NFT API fails', async () => {
+      const context = {
+        event: {
+          text: '/1',
+          _rawEvent: {
+            message: {
+              entities: [
+                {
+                  type: 'bot_command',
+                },
+              ],
+              chat: {
+                id: CHAT_ID,
+              },
+            },
+          },
+        },
+        sendMessage: jest.fn(),
+      };
+      const errorMessage = 'Request failed with status 400';
+      jest.spyOn(nftApi, 'getEvents').mockRejectedValue(new Error(errorMessage));
+      jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
+
+      await HandleMessage(context);
+
+      expect(context.sendMessage).toHaveBeenNthCalledWith(
+        1,
+        'Getting stats for last 1 minute...'
+      );
+      expect(context.sendMessage).toHaveBeenNthCalledWith(
+        2,
+        `Request failed: ${errorMessage}`,
+        defaultAdminReply
+      );
+    });
   });
 });
