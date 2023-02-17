@@ -72,9 +72,7 @@ const defaultUserReply = {
 
 const defaultReply = {
   parseMode: 'HTML',
-  replyMarkup: {
-    keyboard: [[]],
-  },
+  replyMarkup: {},
 };
 
 module.exports = {
