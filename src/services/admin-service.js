@@ -2,11 +2,12 @@ const { getMessage, getResponseMessage } = require('./index');
 const { getStatusMessage, getTime, isValidWalletAddress } = require('../utils');
 const { logger } = require('../logger');
 const userRepository = require('../gateways/user-repository');
+const { INVALID_WALLET_MESSAGE } = require('../constants');
 
 const handleSubscription = async (message) => {
   const [, walletAddress] = message.split(' ');
   if (!isValidWalletAddress(walletAddress)) {
-    return `Wallet address is not valid, please try again`;
+    return INVALID_WALLET_MESSAGE;
   }
 
   const user = await userRepository.getUserByWalletAddress(walletAddress);

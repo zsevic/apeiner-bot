@@ -3,6 +3,7 @@ const {
   ACTIVATED_DEFAULT_MESSAGE,
   ACTIVATION_IN_PROGRESS_MESSAGE,
   ACTIVATION_MESSAGE,
+  INVALID_WALLET_MESSAGE,
 } = require('../constants');
 const userRepository = require('../gateways/user-repository');
 const { getStatusMessage, getTime, isValidWalletAddress } = require('../utils');
@@ -79,7 +80,7 @@ const getResponseMessage = async (context) => {
   if (message.startsWith('activate') || message.startsWith('update')) {
     const [, walletAddress] = message.split(' ');
     if (!isValidWalletAddress(walletAddress)) {
-      return `Wallet address is not valid, please try again`;
+      return INVALID_WALLET_MESSAGE;
     }
 
     await userRepository.setWalletAddress(userId, walletAddress);

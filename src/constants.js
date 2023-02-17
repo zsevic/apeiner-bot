@@ -17,6 +17,7 @@ const ACTIVATED_DEFAULT_MESSAGE = `Apeiner is activated, if you want to pause it
 const ACTIVATION_IN_PROGRESS_MESSAGE = `Apeiner will be activated once we verify the whole registration process\n\nYou can update the wallet address by sending the message in the following format: \n/update [YOUR WALLET ADDRESS]`;
 const ACTIVATION_MESSAGE =
   'In order to activate apeiner, send 0.05ETH to apeiner.eth\n\nAfter you complete the first step, send the message in the following format: \n/activate [YOUR WALLET ADDRESS]\n\nfor example: /activate 0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
+const INVALID_WALLET_MESSAGE = 'Wallet address is not valid, please try again';
 
 const headers = {
   accept: '*/*',
@@ -86,6 +87,7 @@ module.exports = {
   ETH,
   WETH,
   headers,
+  INVALID_WALLET_MESSAGE,
   MAX_TOTAL_SUPPLY,
   MIN_FLOOR_PRICE,
   MIN_TOTAL_SUPPLY,

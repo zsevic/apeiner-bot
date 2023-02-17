@@ -5,6 +5,7 @@ const {
   defaultReply,
   PAUSED_DEFAULT_MESSAGE,
   ACTIVATED_DEFAULT_MESSAGE,
+  INVALID_WALLET_MESSAGE,
 } = require('../constants');
 const nftApi = require('../gateways/nft-api');
 const userRepository = require('../gateways/user-repository');
@@ -124,7 +125,7 @@ describe('HandleMessage', () => {
         await HandleMessage(context);
 
         expect(context.sendMessage).toBeCalledWith(
-          'Wallet address is not valid, please try again',
+          INVALID_WALLET_MESSAGE,
           defaultAdminReply
         );
       });
