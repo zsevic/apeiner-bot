@@ -25,11 +25,10 @@ const setupScheduler = () =>
           .filter((userId) => userId !== CHAT_ID)
           .map((userId) =>
             client
-              .sendMessage(userId, statusMessage, defaultUserReply)
+              .sendMessage(userId, statusMessage)
               .catch((error) => logger.warn(error))
           )
       );
-      await client.sendMessage(CHAT_ID, statusMessage);
 
       const response = await getResponseMessage(...time);
       await Promise.all(
@@ -37,16 +36,10 @@ const setupScheduler = () =>
           .filter((userId) => userId !== CHAT_ID)
           .map((userId) =>
             client
-              .sendMessage(userId, response, {
-                parseMode: 'HTML',
-              })
+              .sendMessage(userId, response, defaultUserReply)
               .catch((error) => logger.warn(error))
           )
       );
-      await client.sendMessage(CHAT_ID, response, {
-        parseMode: 'HTML',
-        replyMarkup,
-      });
     },
     null,
     true,
