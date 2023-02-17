@@ -1,4 +1,4 @@
-const { replyMarkup, CHAT_ID, userReplyMarkup } = require('../constants');
+const { CHAT_ID, defaultAdminReply } = require('../constants');
 const adminService = require('../services/admin-service');
 const userService = require('../services/user-service');
 
@@ -8,15 +8,11 @@ async function HandleMessage(context) {
     const response = await userService.getResponseMessage(context);
     return context.sendMessage(response, {
       parseMode: 'HTML',
-      replyMarkup: userReplyMarkup,
     });
   }
 
   const responseMessage = await adminService.getResponse(context);
-  await context.sendMessage(responseMessage, {
-    parseMode: 'HTML',
-    replyMarkup,
-  });
+  await context.sendMessage(responseMessage, defaultAdminReply);
 }
 
 module.exports = {

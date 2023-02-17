@@ -55,12 +55,24 @@ const userReplyMarkup = {
   ],
 };
 
+const defaultAdminReply = {
+  parseMode: 'HTML',
+  replyMarkup,
+};
+
+const defaultUserReply = {
+  parseMode: 'HTML',
+  replyMarkup: userReplyMarkup,
+};
+
 module.exports = {
   ACTIVATED_DEFAULT_MESSAGE,
   CHAT_ID,
   COLLECTIONS_TO_ANALYZE,
   COLLECTION_RETRIEVAL_COUNTER,
   DATETIME_FORMAT,
+  defaultAdminReply,
+  defaultUserReply,
   ETH,
   WETH,
   headers,

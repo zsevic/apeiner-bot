@@ -1,6 +1,6 @@
 const { getClient } = require('bottender');
 const { CronJob } = require('cron');
-const { CHAT_ID, replyMarkup } = require('./constants');
+const { CHAT_ID, replyMarkup, defaultUserReply } = require('./constants');
 const { logger } = require('./logger');
 const { getResponseMessage } = require('./services');
 const { getTime } = require('./utils');
@@ -25,7 +25,7 @@ const setupScheduler = () =>
           .filter((userId) => userId !== CHAT_ID)
           .map((userId) =>
             client
-              .sendMessage(userId, statusMessage)
+              .sendMessage(userId, statusMessage, defaultUserReply)
               .catch((error) => logger.warn(error))
           )
       );
