@@ -4,6 +4,8 @@ const {
   ACTIVATION_IN_PROGRESS_MESSAGE,
   ACTIVATION_MESSAGE,
   INVALID_WALLET_MESSAGE,
+  SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE,
+  CHAT_ID,
 } = require('../constants');
 const userRepository = require('../gateways/user-repository');
 const { getStatusMessage, getTime, isValidWalletAddress } = require('../utils');
@@ -84,7 +86,8 @@ const getResponseMessage = async (context) => {
     }
 
     await userRepository.setWalletAddress(userId, walletAddress);
-    return `Thanks for setting the wallet address, Apeiner will be activated once we verify the whole registration process`;
+    await context.sendMessage(CHAT_ID, `New user: ${walletAddress}`);
+    return SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE;
   }
 
   if (user.wallet_address) {

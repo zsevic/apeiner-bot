@@ -8,6 +8,7 @@ const {
   INVALID_WALLET_MESSAGE,
   ACTIVATION_IN_PROGRESS_MESSAGE,
   ACTIVATION_MESSAGE,
+  SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE,
 } = require('../constants');
 const nftApi = require('../gateways/nft-api');
 const userRepository = require('../gateways/user-repository');
@@ -839,6 +840,57 @@ describe('HandleMessage', () => {
         expect(context.sendMessage).toHaveBeenCalledWith(
           INVALID_WALLET_MESSAGE,
           defaultReply
+        );
+      });
+
+      it('should handle activation', async () => {
+        const context = {
+          event: {
+            text: `/activate ${validWalletAddress}`,
+            _rawEvent: {
+              message: {
+                entities: [
+                  {
+                    type: 'bot_command',
+                  },
+                ],
+                chat: {
+                  id: userChatId,
+                  username,
+                },
+              },
+            },
+          },
+          sendMessage: jest.fn(),
+        };
+
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue({
+          ...user,
+          wallet_address: null,
+          is_trial_active: false,
+          is_subscribed: false,
+          is_active: false,
+        });
+        const setWalletAddressSpy = jest
+          .spyOn(userRepository, 'setWalletAddress')
+          .mockResolvedValue(null);
+        jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
+
+        await HandleMessage(context);
+
+        expect(context.sendMessage).toHaveBeenNthCalledWith(
+          1,
+          CHAT_ID,
+          `New user: ${validWalletAddress}`
+        );
+        expect(context.sendMessage).toHaveBeenNthCalledWith(
+          2,
+          SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE,
+          defaultReply
+        );
+        expect(setWalletAddressSpy).toHaveBeenCalledWith(
+          userChatId,
+          validWalletAddress
         );
       });
     });
