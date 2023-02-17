@@ -4,7 +4,7 @@ const userRepository = require('../gateways/user-repository');
 
 describe('HandleMessage', () => {
   describe('/users command', () => {
-    it('should return response command is not valid', async () => {
+    it('should return error message command is not valid', async () => {
       const context = {
         event: {
           text: '/users',
@@ -91,6 +91,37 @@ describe('HandleMessage', () => {
 
       expect(context.sendMessage).toBeCalledWith(
         'Wallet address is not valid, please try again',
+        defaultAdminReply
+      );
+    });
+
+    it('should return error message when user is not found', async () => {
+      const context = {
+        event: {
+          text: '/subscribe user.eth',
+          _rawEvent: {
+            message: {
+              entities: [
+                {
+                  type: 'bot_command',
+                },
+              ],
+              chat: {
+                id: CHAT_ID,
+              },
+            },
+          },
+        },
+        sendMessage: jest.fn(),
+      };
+      jest
+        .spyOn(userRepository, 'getUserByWalletAddress')
+        .mockResolvedValue(null);
+
+      await HandleMessage(context);
+
+      expect(context.sendMessage).toBeCalledWith(
+        'User is not found',
         defaultAdminReply
       );
     });
