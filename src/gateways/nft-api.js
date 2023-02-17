@@ -39,7 +39,7 @@ const getCollectionInfo = async (collectionSlug) => {
     },
   })
     .then((res) => res.json())
-    .then((res) => res.data.collection);
+    .then((res) => res.data?.collection);
 };
 
 /**

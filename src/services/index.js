@@ -217,6 +217,7 @@ const addCollectionsInfo = async (collections) =>
     collections.map(async (collectionItem) => {
       const collectionSlug = collectionItem.slug;
       const collectionData = await nftApi.getCollectionInfo(collectionSlug);
+      if (!collectionData) return;
       const bestOffer =
         collectionData?.collectionOffers?.edges?.[0]?.node?.priceType?.eth;
       const stats = collectionData.statsV2;
@@ -334,10 +335,14 @@ const getCollections = async (date) => {
 const getFilteredCollections = (collections) =>
   collections.filter(
     (value) =>
+      value.totalSupply &&
       value.totalSupply <= MAX_TOTAL_SUPPLY &&
       value.totalSupply >= MIN_TOTAL_SUPPLY &&
+      value.totalVolume &&
       value.totalVolume > MIN_VOLUME &&
+      value.floorPrice &&
       value.floorPrice >= MIN_FLOOR_PRICE &&
+      value.numberOfOwners &&
       value.numberOfOwners <= value.totalSupply
   );
 /**
