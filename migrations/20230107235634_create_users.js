@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable('users', function (table) {
-    table.integer('id').notNullable();
+    table.string('id').notNullable();
     table.string('username', 255).notNullable();
     table.string('wallet_address').nullable();
     table.boolean('is_subscribed').defaultTo(false);
