@@ -301,7 +301,9 @@ const getCollections = async (date) => {
       const acceptedBids = isAcceptedBid ? 1 : 0;
       const buyer = node.winnerAccount.address;
       const seller = node.seller.address;
-      const price = node.perUnitPrice.eth;
+      const price = node.perUnitPrice?.eth;
+      if (!price) continue;
+
       if (results[collectionName]) {
         results[collectionName].buyers.push(buyer);
         results[collectionName].sellers.push(seller);
