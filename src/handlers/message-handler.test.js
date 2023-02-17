@@ -70,7 +70,7 @@ describe('HandleMessage', () => {
     it('should return error message when wallet address is not valid', async () => {
       const context = {
         event: {
-          text: '/subscribe some-invalid-address',
+          text: '/subscribe 0xb794f5ea0ba39494ce839613fffba7427957926w',
           _rawEvent: {
             message: {
               entities: [
@@ -98,7 +98,7 @@ describe('HandleMessage', () => {
     it('should return error message when user is not found', async () => {
       const context = {
         event: {
-          text: '/subscribe user.eth',
+          text: '/subscribe 0xb794f5ea0ba39494ce839613fffba74279579268',
           _rawEvent: {
             message: {
               entities: [
@@ -122,6 +122,45 @@ describe('HandleMessage', () => {
 
       expect(context.sendMessage).toBeCalledWith(
         'User is not found',
+        defaultAdminReply
+      );
+    });
+
+    it('should subscribe the user by given wallet address', async () => {
+      const walletAddress = 'user.eth';
+      const context = {
+        event: {
+          text: `/subscribe ${walletAddress}`,
+          _rawEvent: {
+            message: {
+              entities: [
+                {
+                  type: 'bot_command',
+                },
+              ],
+              chat: {
+                id: CHAT_ID,
+              },
+            },
+          },
+        },
+        sendMessage: jest.fn(),
+      };
+      jest.spyOn(userRepository, 'getUserByWalletAddress').mockResolvedValue({
+        id: context.event._rawEvent.message.chat.id,
+        username: 'user',
+        wallet_address: walletAddress,
+        is_subscribed: false,
+        is_active: false,
+        is_trial_active: false,
+        created_at: '2023-01-26T22:37:33.220Z',
+        updated_at: '2023-01-26T22:37:33.220Z',
+      });
+
+      await HandleMessage(context);
+
+      expect(context.sendMessage).toBeCalledWith(
+        'User is subscribed successfully',
         defaultAdminReply
       );
     });
