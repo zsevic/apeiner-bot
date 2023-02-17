@@ -6,4 +6,5 @@ module.exports = {
     '<rootDir>/**/__tests__/**/*.js',
     '<rootDir>/**/*.{spec,test}.js',
   ],
+  restoreMocks: true,
 };
