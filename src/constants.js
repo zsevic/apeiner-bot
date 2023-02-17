@@ -14,6 +14,9 @@ const CHAT_ID = 1618850255;
 
 const PAUSED_DEFAULT_MESSAGE = `Apeiner is paused, if you want to activate it, reply with /activate message`;
 const ACTIVATED_DEFAULT_MESSAGE = `Apeiner is activated, if you want to pause it, reply with /pause message`;
+const ACTIVATION_IN_PROGRESS_MESSAGE = `Apeiner will be activated once we verify the whole registration process\n\nYou can update the wallet address by sending the message in the following format: \n/update [YOUR WALLET ADDRESS]`;
+const ACTIVATION_MESSAGE =
+  'In order to activate apeiner, send 0.05ETH to apeiner.eth\n\nAfter you complete the first step, send the message in the following format: \n/activate [YOUR WALLET ADDRESS]\n\nfor example: /activate 0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
 
 const headers = {
   accept: '*/*',
@@ -71,6 +74,8 @@ const defaultReply = {
 
 module.exports = {
   ACTIVATED_DEFAULT_MESSAGE,
+  ACTIVATION_IN_PROGRESS_MESSAGE,
+  ACTIVATION_MESSAGE,
   CHAT_ID,
   COLLECTIONS_TO_ANALYZE,
   COLLECTION_RETRIEVAL_COUNTER,

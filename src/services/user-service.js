@@ -1,6 +1,8 @@
 const {
   PAUSED_DEFAULT_MESSAGE,
   ACTIVATED_DEFAULT_MESSAGE,
+  ACTIVATION_IN_PROGRESS_MESSAGE,
+  ACTIVATION_MESSAGE,
 } = require('../constants');
 const userRepository = require('../gateways/user-repository');
 const { getStatusMessage, getTime, isValidWalletAddress } = require('../utils');
@@ -85,10 +87,10 @@ const getResponseMessage = async (context) => {
   }
 
   if (user.wallet_address) {
-    return `Apeiner will be activated once we verify the whole registration process\n\nYou can update the wallet address by sending the message in the following format: \n/update [YOUR WALLET ADDRESS]`;
+    return ACTIVATION_IN_PROGRESS_MESSAGE;
   }
 
-  return 'In order to activate apeiner, send 0.05ETH to apeiner.eth\n\nAfter you complete the first step, send the message in the following format: \n/activate [YOUR WALLET ADDRESS]\n\nfor example: /activate 0x71C7656EC7ab88b098defB751B7401B5f6d8976F';
+  return ACTIVATION_MESSAGE;
 };
 
 module.exports = {
