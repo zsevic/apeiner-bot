@@ -544,6 +544,44 @@ describe('HandleMessage', () => {
           defaultReply
         );
       });
+
+      it('should activate notifications', async () => {
+        const context = {
+          event: {
+            text: '/activate',
+            _rawEvent: {
+              message: {
+                entities: [
+                  {
+                    type: 'bot_command',
+                  },
+                ],
+                chat: {
+                  id: userChatId,
+                  username,
+                },
+              },
+            },
+          },
+          sendMessage: jest.fn(),
+        };
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue({
+          ...user,
+          is_subscribed: true,
+          is_active: false,
+        });
+        const activateSpy = jest
+          .spyOn(userRepository, 'activate')
+          .mockResolvedValue(null);
+
+        await HandleMessage(context);
+
+        expect(activateSpy).toBeCalledWith(userChatId);
+        expect(context.sendMessage).toBeCalledWith(
+          ACTIVATED_DEFAULT_MESSAGE,
+          defaultReply
+        );
+      });
     });
   });
 });
