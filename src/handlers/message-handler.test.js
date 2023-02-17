@@ -878,13 +878,7 @@ describe('HandleMessage', () => {
 
         await HandleMessage(context);
 
-        expect(context.sendMessage).toHaveBeenNthCalledWith(
-          1,
-          CHAT_ID,
-          `New user: ${validWalletAddress}`
-        );
-        expect(context.sendMessage).toHaveBeenNthCalledWith(
-          2,
+        expect(context.sendMessage).toHaveBeenCalledWith(
           SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE,
           defaultReply
         );
@@ -929,13 +923,7 @@ describe('HandleMessage', () => {
 
         await HandleMessage(context);
 
-        expect(context.sendMessage).toHaveBeenNthCalledWith(
-          1,
-          CHAT_ID,
-          `New user: ${validWalletAddress}`
-        );
-        expect(context.sendMessage).toHaveBeenNthCalledWith(
-          2,
+        expect(context.sendMessage).toHaveBeenCalledWith(
           SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE,
           defaultReply
         );

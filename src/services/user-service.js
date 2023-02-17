@@ -1,3 +1,4 @@
+const { getClient } = require('bottender');
 const {
   PAUSED_DEFAULT_MESSAGE,
   ACTIVATED_DEFAULT_MESSAGE,
@@ -10,6 +11,7 @@ const {
 const userRepository = require('../gateways/user-repository');
 const { getStatusMessage, getTime, isValidWalletAddress } = require('../utils');
 const service = require('./');
+const client = getClient('telegram');
 
 /**
  *
@@ -86,7 +88,9 @@ const getResponseMessage = async (context) => {
     }
 
     await userRepository.setWalletAddress(userId, walletAddress);
-    await context.sendMessage(CHAT_ID, `New user: ${walletAddress}`);
+    if (process.env.NODE_ENV !== 'test') {
+      await client.sendMessage(CHAT_ID, `New user: ${walletAddress}`);
+    }
     return SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE;
   }
 
