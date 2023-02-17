@@ -6,6 +6,8 @@ const {
   PAUSED_DEFAULT_MESSAGE,
   ACTIVATED_DEFAULT_MESSAGE,
   INVALID_WALLET_MESSAGE,
+  ACTIVATION_IN_PROGRESS_MESSAGE,
+  ACTIVATION_MESSAGE,
 } = require('../constants');
 const nftApi = require('../gateways/nft-api');
 const userRepository = require('../gateways/user-repository');
@@ -719,6 +721,82 @@ describe('HandleMessage', () => {
         expect(context.sendMessage).toHaveBeenNthCalledWith(
           2,
           messageWithNoEvents,
+          defaultReply
+        );
+      });
+
+      it('should return no events for the user with trial', async () => {
+        const context = {
+          event: {
+            text: '/start',
+            _rawEvent: {
+              message: {
+                entities: [
+                  {
+                    type: 'bot_command',
+                  },
+                ],
+                chat: {
+                  id: userChatId,
+                  username,
+                },
+              },
+            },
+          },
+          sendMessage: jest.fn(),
+        };
+
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue({
+          ...user,
+          is_trial_active: false,
+          is_subscribed: false,
+          is_active: false,
+          wallet_address: walletAddress,
+        });
+        jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
+
+        await HandleMessage(context);
+
+        expect(context.sendMessage).toHaveBeenCalledWith(
+          ACTIVATION_IN_PROGRESS_MESSAGE,
+          defaultReply
+        );
+      });
+
+      it('should return no events for the user with trial', async () => {
+        const context = {
+          event: {
+            text: '/start',
+            _rawEvent: {
+              message: {
+                entities: [
+                  {
+                    type: 'bot_command',
+                  },
+                ],
+                chat: {
+                  id: userChatId,
+                  username,
+                },
+              },
+            },
+          },
+          sendMessage: jest.fn(),
+        };
+
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue({
+          ...user,
+          wallet_address: null,
+          is_trial_active: false,
+          is_subscribed: false,
+          is_active: false,
+        });
+        jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
+
+        await HandleMessage(context);
+
+        expect(context.sendMessage).toHaveBeenCalledWith(
+          ACTIVATION_MESSAGE,
           defaultReply
         );
       });
