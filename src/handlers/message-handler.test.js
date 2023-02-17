@@ -9,9 +9,11 @@ describe('HandleMessage', () => {
           text: '/users',
           _rawEvent: {
             message: {
-              entities: [{
-                type: 'bot_command',
-              }],
+              entities: [
+                {
+                  type: 'bot_command',
+                },
+              ],
               chat: {
                 id: CHAT_ID,
               },
@@ -21,11 +23,11 @@ describe('HandleMessage', () => {
         sendMessage: jest.fn(),
       };
       await HandleMessage(context);
-  
+
       expect(context.sendMessage).toBeCalledWith('Command is not valid', {
         parseMode: 'HTML',
         replyMarkup,
       });
-    });  
+    });
   });
 });
