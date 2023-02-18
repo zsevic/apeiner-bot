@@ -7,6 +7,7 @@ const {
   INVALID_WALLET_MESSAGE,
   SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE,
   CHAT_ID,
+  ALREADY_USED_WALLET_ADDRESS_MESSAGE,
 } = require('../constants');
 const userRepository = require('../gateways/user-repository');
 const { getStatusMessage, getTime, isValidWalletAddress } = require('../utils');
@@ -85,6 +86,12 @@ const getResponseMessage = async (context) => {
     const [, walletAddress] = message.split(' ');
     if (!isValidWalletAddress(walletAddress)) {
       return INVALID_WALLET_MESSAGE;
+    }
+
+    const isWalletAddressAlreadyUsed =
+      await userRepository.isWalletAddressAlreadyUsed(userId, walletAddress);
+    if (isWalletAddressAlreadyUsed) {
+      return ALREADY_USED_WALLET_ADDRESS_MESSAGE;
     }
 
     await userRepository.setWalletAddress(userId, walletAddress);

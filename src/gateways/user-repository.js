@@ -46,6 +46,19 @@ const getNumberOfSubscribedUsers = async () => {
 
 /**
  *
+ * @param {number} id
+ * @param {string} walletAddress
+ * @returns {boolean}
+ */
+const isWalletAddressAlreadyUsed = async (id, walletAddress) => {
+  const result = await database('users')
+    .whereNot({ id })
+    .andWhere({ wallet_address: walletAddress });
+  return !!result.length;
+};
+
+/**
+ *
  * @returns {number}
  */
 const getNumberOfActiveUsers = async () => {
@@ -126,6 +139,7 @@ module.exports = {
   getSubscribedUserIds,
   getUserById,
   getUserByWalletAddress,
+  isWalletAddressAlreadyUsed,
   saveUser,
   setWalletAddress,
   subscribe,

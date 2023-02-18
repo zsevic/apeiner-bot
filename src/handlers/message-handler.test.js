@@ -10,6 +10,7 @@ const {
   ACTIVATION_MESSAGE,
   SETTING_WALLET_ADDRESS_FEEDBACK_MESSAGE,
   ERROR_MESSAGE,
+  ALREADY_USED_WALLET_ADDRESS_MESSAGE,
 } = require('../constants');
 const nftApi = require('../gateways/nft-api');
 const userRepository = require('../gateways/user-repository');
@@ -872,6 +873,9 @@ describe('HandleMessage', () => {
           is_subscribed: false,
           is_active: false,
         });
+        jest
+          .spyOn(userRepository, 'isWalletAddressAlreadyUsed')
+          .mockResolvedValue(false);
         const setWalletAddressSpy = jest
           .spyOn(userRepository, 'setWalletAddress')
           .mockResolvedValue(null);
@@ -886,6 +890,47 @@ describe('HandleMessage', () => {
         expect(setWalletAddressSpy).toHaveBeenCalledWith(
           userChatId,
           validWalletAddress
+        );
+      });
+
+      it('should return error message if wallet address is already used', async () => {
+        const context = {
+          event: {
+            text: `/activate ${validWalletAddress}`,
+            _rawEvent: {
+              message: {
+                entities: [
+                  {
+                    type: 'bot_command',
+                  },
+                ],
+                chat: {
+                  id: userChatId,
+                  username,
+                },
+              },
+            },
+          },
+          sendMessage: jest.fn(),
+        };
+
+        jest.spyOn(userRepository, 'getUserById').mockResolvedValue({
+          ...user,
+          wallet_address: null,
+          is_trial_active: false,
+          is_subscribed: false,
+          is_active: false,
+        });
+        jest
+          .spyOn(userRepository, 'isWalletAddressAlreadyUsed')
+          .mockResolvedValue(true);
+        jest.spyOn(utils, 'getDate').mockReturnValue(new Date('2023-02-17'));
+
+        await HandleMessage(context);
+
+        expect(context.sendMessage).toHaveBeenCalledWith(
+          ALREADY_USED_WALLET_ADDRESS_MESSAGE,
+          defaultReply
         );
       });
 
@@ -917,6 +962,9 @@ describe('HandleMessage', () => {
           is_subscribed: false,
           is_active: false,
         });
+        jest
+          .spyOn(userRepository, 'isWalletAddressAlreadyUsed')
+          .mockResolvedValue(false);
         const setWalletAddressSpy = jest
           .spyOn(userRepository, 'setWalletAddress')
           .mockResolvedValue(null);
