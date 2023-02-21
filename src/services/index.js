@@ -300,7 +300,8 @@ const getCollections = async (date) => {
       const isAcceptedBid = node?.payment?.symbol === WETH;
       const acceptedBids = isAcceptedBid ? 1 : 0;
       const buyer = node.winnerAccount.address;
-      const seller = node.seller.address;
+      const seller = node.seller?.address;
+      if (!seller) continue;
       const price = node.perUnitPrice?.eth;
       if (!price) continue;
 
